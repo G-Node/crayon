@@ -31,7 +31,7 @@ var init = function (selector) {
     .append('svg')
     .attr('width', handle.w)
     .attr('height', handle.h)
-    .append('g');
+
 
   // instance variables containing grid information
   handle.xmax = undefined; 
