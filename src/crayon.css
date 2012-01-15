@@ -3,9 +3,19 @@
   shape-rendering: crispEdges;
 }
 
+.xrule text {
+  shape-rendering: crispEdges;
+  font-size: 0.8em;
+}
+
 .yrule line {
   stroke: #aaaaaa;
   shape-rendering: crispEdges;
+}
+
+.yrule text {
+  shape-rendering: crispEdges;
+  font-size: 0.8em;
 }
 
 .rule line.axis {
