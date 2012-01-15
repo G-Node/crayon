@@ -9,8 +9,12 @@ COMPILATION_UNIT = src/start.js \
 									 src/plot/plot.js \
 								 	 src/domReadyEnd.js
 
+all: crayon.js crayon.css
+
 crayon.js: $(COMPILATION_UNIT)
 	cat $(COMPILATION_UNIT) > crayon.js
+
+crayon.css: src/crayon.css
 	cp src/crayon.css crayon.css
 
 crayon.min.js: crayon.js
