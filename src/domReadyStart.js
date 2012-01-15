@@ -1,1 +1,1 @@
-DomReady.ready(function() {
+$(document).ready(function() {
