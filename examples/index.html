@@ -7,7 +7,7 @@
     <link rel=stylesheet href="../crayon.css">
   </head>
   <body>
-    <div id="plot-here" style="width:600px;height: 300px;">
+    <div id="plot-here" style="border:1px solid #ccc;width:600px;height: 300px;">
     </div>
     <script>
       $(document).ready(function() {
@@ -22,10 +22,9 @@
           0.6 : 0.89
         };
         c.plot(d, 'signal_01');
- 
-      });
-    </script>
-    <!--
+        
+        alert('');
+        
         var d2 = {
           0.2 : 0.4,
           0.4 : 0.2,
@@ -35,6 +34,7 @@
           1.2 : 1.89
         };
         c.plot(d2, 'signal_02');
-     -->
+      });
+    </script>
   </body>
 </html>
