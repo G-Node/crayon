@@ -1,3 +1,13 @@
+// First create the internal (jquery) event bus
+crayon.bus = {
+  subscribe : function (event, fn) {
+                $(this).bind(event, fn);
+              },
+  publish   : function (event, params) {
+                $(this).trigger(event, params);
+              }
+}
+
 // This sets up the initialization functions which should work like :
 //  <script>
 //    var c = crayon.init('<<css_div_selector_here>>');
@@ -5,17 +15,19 @@
 //
 //    c.addSignal({..});
 //  </script>
-
 var init = function (selector) {
   var div = d3.select(selector);
 
   // now create the object that encapsulates all plotting features
-  var rtn = crayon.deepcopy(crayon.handle);
+  var handle = crayon.deepcopy(crayon.handle);
 
-  rtn.div = div;
-  rtn.p = 20;
-  rtn.w = div.style('width');
-  rtn.h = div.style('height');
+  // set miscellaneous instance variables
+  handle.div = div;
+  handle.p = 20;  // padding
+  handle.w = div.style('width');
+  handle.h = div.style('height');
+
+  return handle;
 }
 
 crayon.init = init;
