@@ -22,10 +22,25 @@ var init = function (selector) {
   var handle = crayon.deepcopy(crayon.handle);
 
   // set miscellaneous instance variables
-  handle.div = div;
-  handle.p = 20;  // padding
-  handle.w = div.style('width');
-  handle.h = div.style('height');
+  handle.div     = div;
+  handle.p       = 20;  // padding
+  handle.w       = div.style('width');
+  handle.h       = div.style('height');
+  
+  var element = div
+    .append('svg')
+    .attr('width', handle.w)
+    .attr('height', handle.h)
+    .append('g');
+
+  // instance variables containing grid information
+  handle.xmax = undefined; 
+  handle.xmin = undefined;
+
+  handle.ymax = undefined;
+  handle.ymin = undefined;
+
+  handle.element = element;
 
   return handle;
 }
