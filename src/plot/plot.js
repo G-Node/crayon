@@ -18,6 +18,8 @@ var plot = function (data, name) {
   context.ymax = ymax;
   context.ymin = ymin;
 
+  if (!context.grid) { crayon.bus.publish('FirstPlot', [context]) }
+
   crayon.bus.publish('DomainChanged', [context]);
   crayon.bus.publish('RangeChanged', [context]);
 }
