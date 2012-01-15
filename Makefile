@@ -1,16 +1,11 @@
 JS_COMPILER = uglifyjs
 
-# core files do not need to be fired at domReady
-JS_CORE_FILES    = src/core/core.js
-
-# ready files need to be fired at domReady
-JS_READY_FILES   = src/core/init.js 
-k
 COMPILATION_UNIT = src/start.js \
-									 $(JS_CORE_FILES) \
+									 src/core/core.js \
 								   src/end.js \
 								   src/domReadyStart.js \
-								 	 $(JS_FILES) \
+									 src/core/init.js \
+									 src/plot/plot.js \
 								 	 src/domReadyEnd.js
 
 crayon.js: $(COMPILATION_UNIT)
