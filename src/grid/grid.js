@@ -81,6 +81,7 @@ crayon.bus.subscribe('RangeChanged', function(event, context, data) {
   // create new y grid
   context.yrules = context.grid
     .append('g')
+    .style('opacity', '0')
     .attr('class', 'yrule');
 
   // grid lines
@@ -104,6 +105,5 @@ crayon.bus.subscribe('RangeChanged', function(event, context, data) {
   // make it visible
   context.yrules
     .transition()
-    .delay('250')
     .style('opacity', '1');
 });

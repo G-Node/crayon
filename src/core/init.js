@@ -26,7 +26,7 @@ var init = function (selector) {
   handle.p       = 20;  // padding
   handle.w       = div.style('width');
   handle.h       = div.style('height');
-  
+
   var element = div
     .append('svg')
     .attr('width', handle.w)
