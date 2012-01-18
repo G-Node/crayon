@@ -30,7 +30,7 @@ crayon.bus.subscribe('FirstPlot', function(event, context, data) {
 });
 
 crayon.bus.subscribe('DomainChanged', function(event, context, data) {
-  var x = d3.scale.linear().domain([context.xmin, context.xmax]).range([0, context.w]);
+  var x = context.x;
 
   // remove previous x grid if any
   context.grid.select('g.xrule')
@@ -70,8 +70,8 @@ crayon.bus.subscribe('DomainChanged', function(event, context, data) {
 });
 
 crayon.bus.subscribe('RangeChanged', function(event, context, data) {
-  var y = d3.scale.linear().domain([context.ymin, context.ymax]).range([0, context.h]);
-  
+  var y = context.y; 
+
   // remove previous x grid if any
   context.grid.select('g.yrule')
     .transition()
