@@ -1,5 +1,5 @@
 .xrule line {
-  stroke: #aaaaaa;
+  stroke: #eeeeee;
   shape-rendering: crispEdges;
 }
 
@@ -9,7 +9,7 @@
 }
 
 .yrule line {
-  stroke: #aaaaaa;
+  stroke: #eeeeee;
   shape-rendering: crispEdges;
 }
 
@@ -22,12 +22,8 @@
   stroke: #000;
 }
 
-.line {
-  fill: none;
+g.signals path {
   stroke: steelblue;
+  fill: none;
   stroke-width: 1.5px;
-}
-
-circle.line {
-  fill: #fff;
 }
