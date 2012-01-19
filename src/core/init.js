@@ -42,6 +42,8 @@ var init = function (selector) {
 
   handle.element = element;
 
+  if (!handle.grid) { crayon.bus.publish('FirstDraw', [handle]) }
+
   return handle;
 }
 

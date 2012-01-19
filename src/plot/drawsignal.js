@@ -6,7 +6,7 @@ crayon.bus.subscribe('FirstDraw', function (event, context, data) {
     .attr('transform', 'translate('+ context.p.toString() + ',' + 
                                     (parseInt(context.h) - context.p).toString() + ')' +
                        'scale(1,-1)'
-         );
+  );
 });
 
 var drawSignal = function (data, name) {
@@ -60,7 +60,6 @@ var drawSignal = function (data, name) {
   context.y = d3.scale.linear().domain([context.ymin, context.ymax])
                                .range([0, context.h - context.p ]);
 
-  if (!context.grid) { crayon.bus.publish('FirstDraw', [context]) }
 
   if ( domainFlag ) {
     crayon.bus.publish('DomainChanged', [context]);
@@ -74,6 +73,7 @@ var drawSignal = function (data, name) {
 
 crayon.bus.subscribe('SignalAdded', function (context, data, name) {
   // Draw the signal
+  /*
   context.signals
     .data([data]).enter()
     .append('path')
@@ -81,6 +81,7 @@ crayon.bus.subscribe('SignalAdded', function (context, data, name) {
       .x(function(d) { return x(d.x); })
       .y(function(d) { return y(d.y); })
       );
+      */
 });
 
 crayon.handle.drawSignal = drawSignal;
