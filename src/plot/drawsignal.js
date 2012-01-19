@@ -74,12 +74,13 @@ var drawSignal = function (data, name) {
 crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
   // Draw the signal
   context.signals
-    .data([data]).enter()
     .append('path')
+    .data([data])
+    .attr('id', name)
     .attr('d', d3.svg.line()
-      .x(function(d) { return x(d.x); })
-      .y(function(d) { return y(d.y); })
-      );
+      .x(function(d) { return context.x(d.x); })
+      .y(function(d) { return context.y(d.y); })
+    );
 });
 
 crayon.handle.drawSignal = drawSignal;
