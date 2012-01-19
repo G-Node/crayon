@@ -22,7 +22,7 @@
   stroke: #000;
 }
 
-g.signals path {
+g#signals path {
   stroke: steelblue;
   fill: none;
   stroke-width: 1.5px;

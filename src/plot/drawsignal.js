@@ -1,3 +1,14 @@
+crayon.bus.subscribe('FirstDraw', function (event, context, data) {
+  // add the signals SVG groups
+  context.signals = context.element
+    .append('g')
+    .attr('id', 'signals')
+    .attr('transform', 'translate('+ context.p.toString() + ',' + 
+                                    (parseInt(context.h) - context.p).toString() + ')' +
+                       'scale(1,-1)'
+         );
+});
+
 var drawSignal = function (data, name) {
   var context    = this,
       domainFlag = false,
@@ -44,8 +55,10 @@ var drawSignal = function (data, name) {
   }
 
   // create the x and y coordinate mappings
-  context.x = d3.scale.linear().domain([context.xmin, context.xmax]).range([0, context.w]);
-  context.y = d3.scale.linear().domain([context.ymin, context.ymax]).range([0, context.h]);
+  context.x = d3.scale.linear().domain([context.xmin, context.xmax])
+                               .range([0, context.w - context.p ]);
+  context.y = d3.scale.linear().domain([context.ymin, context.ymax])
+                               .range([0, context.h - context.p ]);
 
   if (!context.grid) { crayon.bus.publish('FirstDraw', [context]) }
 
@@ -58,5 +71,16 @@ var drawSignal = function (data, name) {
 
   crayon.bus.publish('SignalAdded', [context, data, name]);
 }
+
+crayon.bus.subscribe('SignalAdded', function (context, data, name) {
+  // Draw the signal
+  context.signals
+    .data([data]).enter()
+    .append('path')
+    .attr('d', d3.svg.line()
+      .x(function(d) { return x(d.x); })
+      .y(function(d) { return y(d.y); })
+      );
+});
 
 crayon.handle.drawSignal = drawSignal;

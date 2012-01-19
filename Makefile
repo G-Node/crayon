@@ -6,7 +6,7 @@ COMPILATION_UNIT = src/start.js \
 								   src/domReadyStart.js \
 									 src/core/init.js \
 									 src/grid/grid.js \
-									 src/plot/plot.js \
+									 src/plot/drawsignal.js \
 								 	 src/domReadyEnd.js
 
 all: crayon.js crayon.css
