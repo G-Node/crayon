@@ -24,8 +24,8 @@ var init = function (selector) {
   // set miscellaneous instance variables
   handle.div     = div;
   handle.p       = 20;  // padding
-  handle.w       = div.style('width');
-  handle.h       = div.style('height');
+  handle.w       = parseInt(div.style('width'));
+  handle.h       = parseInt(div.style('height'));
 
   var element = div
     .append('svg')
