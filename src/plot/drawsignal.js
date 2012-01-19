@@ -27,7 +27,7 @@ var drawSignal = function (data, name) {
     ymax = (ymax < u.y) ? u.y : ymax;
     ymin = (ymin > u.y) ? u.y : ymin;
   }
-  if ( !context.grid ) {
+  if ( context.xmax == undefined ) {
     // This is the first time, right
     context.xmax = xmax;
     context.xmin = xmin;
@@ -71,9 +71,8 @@ var drawSignal = function (data, name) {
   crayon.bus.publish('SignalAdded', [context, data, name]);
 }
 
-crayon.bus.subscribe('SignalAdded', function (context, data, name) {
+crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
   // Draw the signal
-  /*
   context.signals
     .data([data]).enter()
     .append('path')
@@ -81,7 +80,6 @@ crayon.bus.subscribe('SignalAdded', function (context, data, name) {
       .x(function(d) { return x(d.x); })
       .y(function(d) { return y(d.y); })
       );
-      */
 });
 
 crayon.handle.drawSignal = drawSignal;
