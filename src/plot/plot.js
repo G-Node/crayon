@@ -1,4 +1,4 @@
-var plot = function (data, name) {
+var drawSignal = function (data, name) {
   var context    = this,
       domainFlag = false,
       rangeFlag  = false;
@@ -59,4 +59,4 @@ var plot = function (data, name) {
   crayon.bus.publish('SignalAdded', [context, data, name]);
 }
 
-crayon.handle.plot = plot;
+crayon.handle.drawSignal = drawSignal;
