@@ -47,7 +47,7 @@ var plot = function (data, name) {
   context.x = d3.scale.linear().domain([context.xmin, context.xmax]).range([0, context.w]);
   context.y = d3.scale.linear().domain([context.ymin, context.ymax]).range([0, context.h]);
 
-  if (!context.grid) { crayon.bus.publish('FirstPlot', [context]) }
+  if (!context.grid) { crayon.bus.publish('FirstDraw', [context]) }
 
   if ( domainFlag ) {
     crayon.bus.publish('DomainChanged', [context]);

@@ -1,4 +1,4 @@
-crayon.bus.subscribe('FirstPlot', function(event, context, data) {
+crayon.bus.subscribe('FirstDraw', function(event, context, data) {
   // setup grid SVG groups
   context.grid = context.element
     .append('g')
