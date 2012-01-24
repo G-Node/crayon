@@ -47,13 +47,19 @@ crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
     );
 });
 
-crayon.bus.subscribe('RangeChanged', function (event, context, data) {
-  context.signals
-    .selectAll('path')
-    .transition()
-    .attr('d', d3.svg.line()
-      .x(function(d) { return context.x(d.x); })
-      .y(function(d) { return context.y(d.y); })
-    );
-});
+var scale = function(event, context, data) {
+  if ( data.old != data.new ){
+    context.signals
+      .selectAll('path')
+      .transition()
+      .attr('d', d3.svg.line()
+        .x(function(d) { return context.x(d.x); })
+        .y(function(d) { return context.y(d.y); })
+      );
+  }
+}
+
+crayon.bus.subscribe('RangeChanged', scale);
+crayon.bus.subscribe('DomainChanged', scale);
+
 crayon.handle.drawSignal = drawSignal;
