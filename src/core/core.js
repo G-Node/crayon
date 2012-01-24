@@ -6,7 +6,6 @@ var deepcopy = function(o) {
 };
 
 window.crayon = {
-  version    : '0.0.1',
   handle     : {},
   deepcopy   : deepcopy
 };

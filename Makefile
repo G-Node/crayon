@@ -2,6 +2,7 @@ JS_COMPILER = uglifyjs
 
 COMPILATION_UNIT = src/start.js \
 									 src/core/core.js \
+									 src/core/version.js \
 								   src/end.js \
 								   src/domReadyStart.js \
 									 src/core/init.js \
