@@ -32,11 +32,6 @@ var drawSignal = function (data, name) {
   context.updateRange([ymin, ymax]);
 
   // create the x and y coordinate mappings
-  context.x = d3.scale.linear().domain([context.xmin, context.xmax])
-                               .range([0, context.w - context.p ]);
-  context.y = d3.scale.linear().domain([context.ymin, context.ymax])
-                               .range([0, context.h - context.p ]);
-
   crayon.bus.publish('SignalAdded', [context, data, name]);
 }
 
@@ -52,4 +47,13 @@ crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
     );
 });
 
+crayon.bus.subscribe('RangeChanged', function (event, context, data) {
+  context.signals
+    .selectAll('path')
+    .transition()
+    .attr('d', d3.svg.line()
+      .x(function(d) { return context.x(d.x); })
+      .y(function(d) { return context.y(d.y); })
+    );
+});
 crayon.handle.drawSignal = drawSignal;

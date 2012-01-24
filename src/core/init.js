@@ -14,6 +14,7 @@ var updateRange = function(range) {
   // RangeChanged event and return true. Else, return false. 
   var context = this,
       flag    = false;
+      oldymin = oldymax = undefined;
 
   if (context.ymax == undefined) {
     // first time
@@ -22,10 +23,12 @@ var updateRange = function(range) {
     context.ymax = range[1];
   } else {
     if ( context.ymin > range[0] ) { 
-      flag = true;
+      flag         = true;
+      oldymin      = context.ymin;
       context.ymin = range[0];
     }if ( context.ymax < range[1] ) { 
-      flag = true;
+      flag         = true;
+      oldymax      = context.ymax;
       context.ymax = range[1];
     }
   }
@@ -33,7 +36,9 @@ var updateRange = function(range) {
   if ( flag ) {
     context.y = d3.scale.linear().domain([context.ymin, context.ymax])
                                .range([0, context.h - context.p ]);
-    crayon.bus.publish('RangeChanged', [context]);
+    crayon.bus.publish('RangeChanged', [context, 
+              { old : [oldymin, oldymax],
+                new : [context.ymin, context.ymax] }]);
   }
 
   return flag;
@@ -44,7 +49,8 @@ var updateDomain = function(domain) {
   // context's domain.  If a domain update is done, publish the
   // DomainChanged event and return true. Else, return false. 
   var context = this,
-      flag    = false;
+      flag    = false,
+      oldxmin = oldxmax = undefined;
 
   if (context.xmax == undefined) {
     // first time
@@ -53,10 +59,12 @@ var updateDomain = function(domain) {
     context.xmax = domain[1];
   } else {
     if ( context.xmin > domain[0] ) { 
-      flag = true;
+      flag         = true;
+      oldxmin      = context.xmin;
       context.xmin = domain[0];
     }if ( context.xmax < domain[1] ) { 
-      flag = true;
+      flag         = true;
+      oldxmax      = context.xmax;
       context.xmax = domain[1];
     }
   }
@@ -64,7 +72,9 @@ var updateDomain = function(domain) {
   if ( flag ) {
    context.x = d3.scale.linear().domain([context.xmin, context.xmax])
                                .range([0, context.w - context.p ]);
-   crayon.bus.publish('DomainChanged', [context]);
+   crayon.bus.publish('DomainChanged', [context,
+       { old : [oldxmin, oldxmax],
+         new : [context.xmin, context.xmax] } ]);
   }
 
   return flag;
