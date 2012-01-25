@@ -21,7 +21,7 @@ div#header {
 
 h1.logo {
   font-size: 2.4em;
-  color: #444444;
+  color: #1BA5E0;
   display: inline-block;
   margin-left: 10px;
 }
@@ -58,4 +58,14 @@ p.description {
   line-height: 1.9em;
   font-size: 1.0em;
   margin-top: 10px;
+}
+
+a.inline {
+  text-decoration: underline;
+  color: #1B70E0;
+}
+
+a.inline:hover {
+  text-decoration: none;
+  color: #66A34E;
 }
