@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>crayon.js - dynamic time-series plotting for the web</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/crayon.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700'
+    rel='stylesheet' type='text/css'>
+
+    <script src="lib/jquery-1.7.1.min.js"></script>
+    <script src="lib/d3.min.js"></script>
+    <script src="lib/crayon.min.js"></script>
+  </head>
+  <body>
+    <div id="page">
+      <div id="header">
+        <h1 class="logo">
+          crayon.js
+        </h1>
+
+        <div id="navigation">
+          <a class="nav-links" href="http://github.com/G-Node/crayon/wiki/documentation">documentation</a>
+          <a class="nav-links" href="examples">examples</a>
+          <a class="nav-links" href="https://github.com/G-Node/crayon/">contribute</a>
+        </div>
+      </div>
+
+      <div id="masthead">
+        <div id="right-mast">
+          <div id="plot-here" style="width:100%; height: 400px;">
+          </div>
+          <script>
+            $(document).ready(function() {
+              var c = window.c = crayon.init('div#plot-here');
+
+              var d = [
+                { x: 0.1, y: 0.4},
+                { x: 0.2, y: 0.3},
+                { x: 0.3, y: 0.5},
+                { x: 0.4, y: 0.6},
+                { x: 0.5, y: 0.9},
+                { x: 0.6, y: 0.89}
+              ];
+              c.drawSignal(d, 'signal_01');
+              
+              alert('Once you click OK, a new signal will be plotted over the existing signal. Notice how the grid changes and the signals slide to adjust to the new scale');
+
+              var d2 = [
+                { x: 0.1, y: 0.8},
+                { x: 0.2, y: 0.9},
+                { x: 0.3, y: 0.15},
+                { x: 0.4, y: 1.8},
+                { x: 0.5, y: 0.12},
+                { x: 0.6, y: 0.22},
+                { x: 0.7, y: 0.32},
+                { x: 0.8, y: 0.39}
+              ]
+              c.drawSignal(d2, 'signal_02');
+            }); 
+          </script>
+        </div>
+        <div id="left-mast">
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
