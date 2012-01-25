@@ -1,1 +1,1 @@
-crayon.version = '0.0.4';
+crayon.version = '0.0.5';
