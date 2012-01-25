@@ -6,6 +6,7 @@ COMPILATION_UNIT = src/start.js \
 								   src/end.js \
 								   src/domReadyStart.js \
 									 src/core/init.js \
+									 src/core/color.js \
 									 src/grid/grid.js \
 									 src/plot/drawsignal.js \
 								 	 src/domReadyEnd.js
