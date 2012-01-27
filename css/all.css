@@ -19,11 +19,15 @@ div#header {
   border-bottom: 1px dotted #aaaaaa;
 }
 
-h1.logo {
+a.logo {
   font-size: 2.4em;
   color: #1BA5E0;
   display: inline-block;
+  text-decoration: none;
   margin-left: 10px;
+}
+a.logo:hover {
+  color: #D67B4d;
 }
 
 div#navigation {
