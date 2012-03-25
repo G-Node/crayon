@@ -87,7 +87,16 @@ var updateDomain = function(domain) {
 //
 //    c.addSignal({..});
 //  </script>
-var init = function (selector) {
+var init = function (selector, params) {
+  /* Params is an object.  Possible options are as follows
+   * ticks: true/false
+   */
+  params = (params == undefined) ? 
+    {
+      /* The default values */
+      ticks : true,
+    } : params;
+
   var div = d3.select(selector);
 
   // now create the object that encapsulates all plotting features
@@ -95,7 +104,8 @@ var init = function (selector) {
 
   // set miscellaneous instance variables
   handle.div     = div;
-  handle.p       = 20;  // padding
+  handle.ticks   = params.ticks;
+  handle.p       = params.ticks ? 20 : 0;
   handle.w       = parseInt(div.style('width'));
   handle.h       = parseInt(div.style('height'));
 

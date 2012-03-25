@@ -54,14 +54,16 @@ crayon.bus.subscribe('DomainChanged', function(event, context, data) {
     .attr('y2', context.h);
 
   // grid markings
-  context.xrules.selectAll('text')
-    .data(x.ticks(10))
-    .enter().append('text')
-    .attr('transform', 'scale(1,-1)')
-    .attr('text-anchor', 'middle')
-    .attr('x', x)
-    .attr('y', 15)
-    .text(function(d) { return Math.round(d *1000) / 1000.0; });
+  if (context.ticks) {
+    context.xrules.selectAll('text')
+      .data(x.ticks(10))
+      .enter().append('text')
+      .attr('transform', 'scale(1,-1)')
+      .attr('text-anchor', 'middle')
+      .attr('x', x)
+      .attr('y', 15)
+      .text(function(d) { return Math.round(d *1000) / 1000.0; });
+  }
 
   // make it visible
   context.xrules

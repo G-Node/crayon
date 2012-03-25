@@ -8,11 +8,15 @@
     <link rel=stylesheet href="../crayon.css">
   </head>
   <body>
-    <div id="plot-here" style="width:600px;height: 300px;">
+    <div id="plot-here1" style="width:600px;height: 300px;border:1px solid #bbbbbb; margin-bottom: 10px;">
+    </div>
+     <div id="plot-here2" style="width:600px;height: 300px;border:1px solid #bbbbbb; margin-bottom: 10px;">
+    </div>
+     <div id="plot-here3" style="width:600px;height: 300px;border:1px solid #bbbbbb; margin-bottom: 10px;">
     </div>
     <script>
       $(document).ready(function() {
-        var c = window.c = crayon.init('div#plot-here');
+        var c = window.c = crayon.init('div#plot-here1');
 
         var d = [
           { x: 0.1, y: 0.4},
@@ -23,8 +27,6 @@
           { x: 0.6, y: 0.89}
         ];
         c.drawSignal(d, 'signal_01');
-
-        alert('Once you click OK, a new signal will be plotted over the existing signal. Notice how the grid changes and the signals slide to adjust to the new scale');
         
         var d2 = [
           { x: 0.1, y: 0.8},
@@ -37,6 +39,10 @@
           { x: 0.8, y: 0.39}
         ]
         c.drawSignal(d2, 'signal_02');
+
+
+        var c1 = crayon.init('div#plot-here2', { ticks: false });
+        c1.drawSignal(d2, 'signal_02');
       });
     </script>
   </body>
