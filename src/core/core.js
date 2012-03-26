@@ -6,6 +6,11 @@ var deepcopy = function(o) {
 };
 
 window.crayon = (function() {
+  var default_params = {
+    /* The default configuration directives */
+    ticks : true,
+  }
+
   var bus = {
     subscribe : function (event, fn) {
                   $(this).bind(event, fn);
@@ -94,25 +99,20 @@ window.crayon = (function() {
   //
   //    c.addSignal({..});
   //  </script>
-  var init = function (selector, params) {
-    /* Params is an object.  Possible options are as follows
-     * ticks: true/false
-     */
-    params = (params == undefined) ? 
-      {
-        /* The default values */
-        ticks : true,
-      } : params;
-
+  var init = function (selector, received_params) {
     var div = d3.select(selector);
 
     // now create the object that encapsulates all plotting features
-    var handle = crayon.deepcopy(crayon.handle);
+    var handle = deepcopy(crayon.handle);
+
+    /* Copy all passed directives to a copy of the default params */
+    for ( param in received_params ) {
+      handle.params[param] = received_params[param];
+    }
 
     // set miscellaneous instance variables
     handle.div     = div;
-    handle.ticks   = params.ticks;
-    handle.p       = params.ticks ? 20 : 0;
+    handle.p       = handle.params.ticks ? 20 : 0;
     handle.w       = parseInt(div.style('width'));
     handle.h       = parseInt(div.style('height'));
 
@@ -140,8 +140,7 @@ window.crayon = (function() {
   }
 
   return {
-    handle     : {},
-    deepcopy   : deepcopy,
+    handle     : {params : deepcopy(default_params)},
     bus        : bus,
     init       : init
   }

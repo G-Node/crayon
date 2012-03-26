@@ -54,7 +54,7 @@ crayon.bus.subscribe('DomainChanged', function(event, context, data) {
     .attr('y2', context.h);
 
   // grid markings
-  if (context.ticks) {
+  if (context.params.ticks) {
     context.xrules.selectAll('text')
       .data(x.ticks(10))
       .enter().append('text')
@@ -95,14 +95,16 @@ crayon.bus.subscribe('RangeChanged', function(event, context, data) {
     .attr('x2', context.w)
     .attr('y2', y);
   
-  context.yrules.selectAll('text')
-    .data(y.ticks(5))
-    .enter().append('text')
-    .attr('transform', 'scale(1,-1)')
-    .attr('text-anchor', 'end')
-    .attr('x', -3)
-    .attr('y', function(d) { return - parseInt(y(d)); })
-    .text(function(d) { return Math.round(d *1000) / 1000.0; });
+  if (context.params.ticks) {
+    context.yrules.selectAll('text')
+      .data(y.ticks(5))
+      .enter().append('text')
+      .attr('transform', 'scale(1,-1)')
+      .attr('text-anchor', 'end')
+      .attr('x', -3)
+      .attr('y', function(d) { return - parseInt(y(d)); })
+      .text(function(d) { return Math.round(d *1000) / 1000.0; });
+  }
 
   // make it visible
   context.yrules
