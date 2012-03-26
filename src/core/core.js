@@ -110,6 +110,9 @@ window.crayon = (function() {
       handle.params[param] = received_params[param];
     }
 
+    /* Initialize color mechanism */
+    handle.color = crayon.color_init(); 
+
     // set miscellaneous instance variables
     handle.div     = div;
     handle.p       = handle.params.ticks ? 20 : 0;
@@ -120,7 +123,6 @@ window.crayon = (function() {
       .append('svg')
       .attr('width', handle.w)
       .attr('height', handle.h)
-
 
     // instance variables containing grid information
     handle.xmax = undefined; 

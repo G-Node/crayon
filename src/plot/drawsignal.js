@@ -40,7 +40,7 @@ crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
   context.signals
     .append('path')
     .data([data])
-    .style('stroke', crayon.color())
+    .style('stroke', context.color())
     .attr('id', name)
     .attr('d', d3.svg.line()
       .x(function(d) { return context.x(d.x); })
