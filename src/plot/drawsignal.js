@@ -49,7 +49,7 @@ crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
 });
 
 var scale = function(event, context, data) {
-  if ( data.old != data.new ){
+  if ( data.ol != data.ne ){
     context.signals
       .selectAll('path')
       .transition()

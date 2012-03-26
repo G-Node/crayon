@@ -49,8 +49,8 @@ window.crayon = (function() {
       context.y = d3.scale.linear().domain([context.ymin, context.ymax])
                                  .range([0, context.h - context.p ]);
       crayon.bus.publish('RangeChanged', [context, 
-                { old : [oldymin, oldymax],
-                  new : [context.ymin, context.ymax] }]);
+                { ol : [oldymin, oldymax],
+                  ne : [context.ymin, context.ymax] }]);
     }
 
     return flag;
@@ -85,8 +85,8 @@ window.crayon = (function() {
      context.x = d3.scale.linear().domain([context.xmin, context.xmax])
                                  .range([0, context.w - context.p ]);
      crayon.bus.publish('DomainChanged', [context,
-         { old : [oldxmin, oldxmax],
-           new : [context.xmin, context.xmax] } ]);
+         { ol : [oldxmin, oldxmax],
+           ne : [context.xmin, context.xmax] } ]);
     }
 
     return flag;
