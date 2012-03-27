@@ -8,6 +8,7 @@ COMPILATION_UNIT = src/start.js \
 									 src/core/color.js \
 									 src/grid/grid.js \
 									 src/plot/drawsignal.js \
+									 src/event/drag.js \
 								 	 src/domReadyEnd.js
 
 all: crayon.js crayon.css
