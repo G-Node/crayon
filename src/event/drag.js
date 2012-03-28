@@ -6,7 +6,7 @@ crayon.drag_init = function (context) {
       start, end;
 
   var height    = parseInt(d3.select(node).style('height'));
-  var positionX = parseInt($(div).position().left) + 1 + context.p;
+  var positionX = parseInt($(div).offset().left) + 1 + context.p;
 
   var rect = d3.select(node)
     .append('g')
@@ -25,7 +25,6 @@ crayon.drag_init = function (context) {
     flag = true;
     start = event.clientX - positionX; 
 
-  
     rect.attr('x', start)
       .attr('width', 1); 
 
