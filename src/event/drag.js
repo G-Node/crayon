@@ -39,18 +39,20 @@ crayon.drag_init = function (context) {
       if ( Math.abs(start - end) < 5 ) {
       /* Ignoring selections smaller than 5 pixels */
         rect.attr('x', 0).attr('width', 0);
-      }
-
-      if ( start < end ) {
-        crayon.bus.publish("Selection", [context, {
-            start: context.x.invert(start),
-            end  : context.x.invert(end)
-          }]);
       } else {
-        crayon.bus.publish("Selection", [context, {
-            start: context.x.invert(end),
-            end  : context.x.invert(start)
-        }]);
+      /* Firing selection events only for selections larger than
+       * 5pixels */
+        if ( start < end ) {
+          crayon.bus.publish("Selection", [context, {
+              start: context.x.invert(start),
+              end  : context.x.invert(end)
+            }]);
+        } else {
+          crayon.bus.publish("Selection", [context, {
+              start: context.x.invert(end),
+              end  : context.x.invert(start)
+          }]);
+        }
       }
     }
 
