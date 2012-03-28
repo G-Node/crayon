@@ -48,7 +48,7 @@ crayon.drag_init = function (context) {
             end  : context.x.invert(end)
           }]);
       } else {
-        crayon.bus.publixh("Selection", [context, {
+        crayon.bus.publish("Selection", [context, {
             start: context.x.invert(end),
             end  : context.x.invert(start)
         }]);
@@ -75,4 +75,13 @@ crayon.drag_init = function (context) {
       event.stopPropagation();
     }
   });
+
+  context.onselection = function (callback) {
+    /* Can be used to communicate selections to the outside world. */
+    crayon.bus.subscribe("Selection", function (event, _context, t_values) {
+        if (_context == context) {
+          callback(event, _context, t_values);
+        }
+    });
+  }
 };
