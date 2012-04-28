@@ -6,11 +6,6 @@ var deepcopy = function(o) {
 };
 
 window.crayon = (function() {
-  var default_params = {
-    /* The default configuration directives */
-    ticks : true,
-  }
-
   var bus = {
     subscribe : function (event, fn) {
                   $(this).bind(event, fn);
@@ -99,23 +94,42 @@ window.crayon = (function() {
   //
   //    c.addSignal({..});
   //  </script>
-  var init = function (selector, received_params) {
+  var init = function (selector, opts) {
     var div = d3.select(selector);
 
     // now create the object that encapsulates all plotting features
-    var handle = deepcopy(crayon.handle);
+    var handle = deepcopy(crayon.handle),
+        options = {
+          colors : ['#1BA5E0', '#E68415', '#E61F15', '#2B6B1B'],
+          xaxis :  {
+              showTicks: true, 
+              position: 'bottom',
+              transform: null, // null or f : number -> string
+              margin: null, // null or pixels which contain ticks
+              tickNumber: null, // null = auto-detect OR number of ticks  
+              tickDecimals: null // null = auto-detect OR number of decimal places
+          },
+          yaxis :  {
+              showTicks: true, 
+              position: 'bottom',
+              transform: null, // null or f : number -> string
+              margin: null, // null or pixels which contain ticks
+              tickNumber: null, // null = auto-detect OR number of ticks  
+              tickDecimals: null // null = auto-detect OR number of decimal places
+          },
+          interaction : {
+              selections: true // false to disable selections
+          },
+        };
 
-    /* Copy all passed directives to a copy of the default params */
-    for ( param in received_params ) {
-      handle.params[param] = received_params[param];
-    }
+    handle.options = parseOptions(options, opts);
 
     /* Initialize color mechanism */
     handle.color = crayon.color_init(); 
 
     // set miscellaneous instance variables
     handle.div     = div;
-    handle.p       = handle.params.ticks ? 20 : 0;
+    handle.p       = 20;
     handle.w       = parseInt(div.style('width'));
     handle.h       = parseInt(div.style('height'));
 
@@ -144,8 +158,15 @@ window.crayon = (function() {
     return handle;
   }
 
+  function parseOptions(options, opts) {
+    /* For now, doing a simple recursive merge. May extend this
+     * function further if more complex options are added. */ 
+    return $.extend(true, options, opts);
+  };
+
   return {
-    handle     : {params : deepcopy(default_params)},
+    handle     : {},
+    // used to add abilities to crayon in other files.
     bus        : bus,
     init       : init
   }

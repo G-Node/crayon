@@ -54,7 +54,7 @@ crayon.bus.subscribe('DomainChanged', function(event, context, data) {
     .attr('y2', context.h);
 
   // grid markings
-  if (context.params.ticks) {
+  if (context.options.xaxis.showTicks) {
     context.xrules.selectAll('text')
       .data(x.ticks(10))
       .enter().append('text')
@@ -95,7 +95,7 @@ crayon.bus.subscribe('RangeChanged', function(event, context, data) {
     .attr('x2', context.w)
     .attr('y2', y);
   
-  if (context.params.ticks) {
+  if (context.options.yaxis.showTicks) {
     context.yrules.selectAll('text')
       .data(y.ticks(5))
       .enter().append('text')
