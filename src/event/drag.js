@@ -6,13 +6,13 @@ crayon.drag_init = function (context) {
       start, end;
 
   var height    = parseInt(d3.select(node).style('height'));
-  var positionX = parseInt($(div).offset().left) + 1 + context.p;
+  var positionX = parseInt($(div).offset().left) + 1 + context.px;
 
   var rect = d3.select(node)
     .append('g')
     .classed('overlay', true)
-    .attr('transform', 'translate('+ context.p.toString() + ',' + 
-                       (parseInt(context.h) - context.p).toString() + ')' +
+    .attr('transform', 'translate('+ context.px.toString() + ',' + 
+                       (parseInt(context.h) - context.py).toString() + ')' +
                        'scale(1,-1)'
     )
     .append('rect')

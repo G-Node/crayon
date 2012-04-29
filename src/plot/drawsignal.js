@@ -3,8 +3,8 @@ crayon.bus.subscribe('FirstDraw', function (event, context, data) {
   context.signals = context.element
     .append('g')
     .attr('id', 'signals')
-    .attr('transform', 'translate('+ context.p.toString() + ',' + 
-                                    (parseInt(context.h) - context.p).toString() + ')' +
+    .attr('transform', 'translate('+ context.px.toString() + ',' + 
+                                    (parseInt(context.h) - context.py).toString() + ')' +
                        'scale(1,-1)'
   );
 });

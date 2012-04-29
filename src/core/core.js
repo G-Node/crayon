@@ -42,7 +42,7 @@ window.crayon = (function() {
 
     if ( flag ) {
       context.y = d3.scale.linear().domain([context.ymin, context.ymax])
-                                 .range([0, context.h - context.p ]);
+                                 .range([0, context.h - context.py ]);
       crayon.bus.publish('RangeChanged', [context, 
                 { ol : [oldymin, oldymax],
                   ne : [context.ymin, context.ymax] }]);
@@ -78,7 +78,7 @@ window.crayon = (function() {
     
     if ( flag ) {
      context.x = d3.scale.linear().domain([context.xmin, context.xmax])
-                                 .range([0, context.w - context.p ]);
+                                 .range([0, context.w - context.px ]);
      crayon.bus.publish('DomainChanged', [context,
          { ol : [oldxmin, oldxmax],
            ne : [context.xmin, context.xmax] } ]);
@@ -129,7 +129,8 @@ window.crayon = (function() {
 
     // set miscellaneous instance variables
     handle.div     = div;
-    handle.p       = 20;
+    handle.px      = 20;
+    handle.py      = 20;
     handle.w       = parseInt(div.style('width'));
     handle.h       = parseInt(div.style('height'));
 
