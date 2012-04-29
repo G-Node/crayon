@@ -9,10 +9,12 @@ crayon.bus.subscribe('FirstDraw', function (event, context, data) {
   );
 });
 
-var drawSignal = function (data, name) {
+var drawSignal = function (data, name, color) {
   var context    = this,
       domainFlag = false,
-      rangeFlag  = false;
+      rangeFlag  = false,
+      color      = ( color == undefined ) ? context.color() : color;
+
 
   var xmax = ymax = Number.MIN_VALUE,
       xmin = ymin = Number.MAX_VALUE;
@@ -32,15 +34,17 @@ var drawSignal = function (data, name) {
   context.updateRange([ymin, ymax]);
 
   // create the x and y coordinate mappings
-  crayon.bus.publish('SignalAdded', [context, data, name]);
+  crayon.bus.publish('SignalAdded', [context, data, name, color]);
+
+  return color; /* Could be used as an identifier in calling code. */
 }
 
-crayon.bus.subscribe('SignalAdded', function (event, context, data, name) {
+crayon.bus.subscribe('SignalAdded', function (event, context, data, name, color) {
   // Draw the signal
   context.signals
     .append('path')
     .data([data])
-    .style('stroke', context.color())
+    .style('stroke', color)
     .attr('id', name)
     .attr('d', d3.svg.line()
       .x(function(d) { return context.x(d.x); })
