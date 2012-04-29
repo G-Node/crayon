@@ -154,7 +154,9 @@ window.crayon = (function() {
     if (!handle.grid) { crayon.bus.publish('FirstDraw', [handle]) }
 
     /* Initialize all context-sensitive features */
-    crayon.drag_init(handle);
+    if (handle.options.interaction.selections){
+      crayon.drag_init(handle);
+    }
 
     return handle;
   }
