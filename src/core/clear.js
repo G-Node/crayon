@@ -2,6 +2,7 @@ crayon.handle.clear = function () {
   /* Just remove all the signals. and the grid */
   this.signals.remove();
   this.grid.remove();
+  this.overlay.remove();
 
 
   /* Then add the bare minimums */
@@ -23,6 +24,10 @@ crayon.handle.clear = function () {
     );
 
   this.color = crayon.color_init();
+
+  if (this.options.interaction.selections){
+    crayon.drag_init(this);
+  }
 
   this.xmax = undefined;
   this.ymax = undefined;

@@ -5,17 +5,19 @@ crayon.drag_init = function (context) {
       /* Denotes whether a drag is in progress or not */
       start, end;
 
-  var height    = parseInt(d3.select(node).style('height'));
-  var positionX = parseInt($(div).offset().left) + 1 + context.px;
+  var height    = parseInt(d3.select(node).style('height')),
+      positionX = parseInt($(div).offset().left) + 1 + context.px;
 
-  var rect = d3.select(node)
+  context.overlay = d3.select(node)
     .append('g')
     .classed('overlay', true)
     .attr('transform', 'translate('+ context.px.toString() + ',' + 
                        (parseInt(context.h) - context.py).toString() + ')' +
                        'scale(1,-1)'
-    )
-    .append('rect')
+    );
+
+
+  var rect = context.overlay.append('rect')
     .attr('x', 0)
     .attr('y', 0)
     .attr('width', 0)
