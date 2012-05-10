@@ -27,6 +27,12 @@
       color: #555555;
       font-size: 1.5em;
     }
+
+    div.action {
+      width: 600px;
+      text-align: right;
+      margin-top: 10px;
+    }
   </style>
   <body>
     <div class="body">
@@ -40,9 +46,17 @@
       <div id="plot-here2" style="width:600px;height: 300px;">
       </div>
 
+      <h2>SpikeTrain</h2>
+      <div id="plot-spike" style="width: 600px;height: 300px;">
+      </div>
+      <div class="action" id="plot-spike-action">
+        <button id="spike-action-add">add spike</button>
+      </div>
+
       <h2>Bizarre colors</h2>
       <div id="plot-here3" style="width:600px;height: 300px;">
       </div>
+
     </div>
     <script src="../lib/jquery/jquery.js"></script>
     <script src="../lib/d3/d3.js"></script>
@@ -50,7 +64,6 @@
     </script>
     <script>
       $(document).ready(function() {
-        var c = window.c = crayon.init('div#plot-here1');
 
         var signals = [
           [
@@ -116,19 +129,55 @@
             { x:140, y: 109}
           ]
         ];
-        c.drawSignal(signals[0], 'signal_01');
-        c.drawSignal(signals[1], 'signal_02');
 
-        window.c1 = crayon.init('div#plot-here2', 
+        var spiketrain = [ 
+          [21, 36, 41, 46, 48, 61, 70, 75, 81, 85, 97, 109, 115, 118,
+            122, 133, 146, 151, 162, 168, 174, 188, 203, 215, 227, 235,
+            249, 261, 271, 279, 290, 302, 317, 329, 339, 353, 361, 365,
+            371, 382, 388, 398, 400, 407],
+          [908, 915, 919, 924, 933, 942, 950, 954, 960, 971, 979, 990,
+            1001, 1016, 1027, 1034, 1038, 1051, 1063, 1071, 1084, 1091,
+            1093, 1104, 1115, 1125, 1132, 1138, 1153, 1161], 
+          [531, 545, 551, 560, 562, 573, 587, 600, 611, 620, 627, 633,
+            638, 641, 650, 654, 657, 665, 678, 681, 688, 695, 705,
+            715, 728, 737, 745, 752, 755, 765, 773, 786, 799, 802,
+            813, 817, 825, 839, 849, 856, 862]
+        ];
+
+        var signalplot1 = window.signalplot1 = crayon.init('div#plot-here1');
+
+        signalplot1.drawSignal(signals[0], 'signal_01');
+        signalplot1.drawSignal(signals[1], 'signal_02');
+
+        window.signalplot2 = crayon.init('div#plot-here2', 
           { xaxis : { showTicks : false },
             yaxis : { showTicks : false },
             interaction : {selections: false}
           });
         /* This shows that drawSignal returns signal color */
-        console.log(c1.drawSignal(signals[1], 'signal_02'));
+        console.log(signalplot2.drawSignal(signals[1], 'signal_02'));
 
-        window.c2 = crayon.init('div#plot-here3');
-        c2.drawSignal(signals[2], 'signal_03', '#15FF00');
+        window.signalplot3 = crayon.init('div#plot-here3');
+        signalplot3.drawSignal(signals[2], 'signal_03', '#15FF00');
+
+        window.spikeplot = crayon.init('div#plot-spike',
+        { 
+          interaction : { selections: false }
+        });
+        spikeplot.drawSpikeTrain(spiketrain[0], 'spiketrain_01',
+        '#0099ff');
+
+        $('button#spike-action-add').click(function() {
+          $('button#spike-action-add').text('add yet another');
+          spikeplot.drawSpikeTrain(spiketrain[1], 'spiketrain_03', '#0099ff');
+
+          $('button#spike-action-add').unbind();
+          
+          $('button#spike-action-add').click(function() {
+            $('button#spike-action-add').attr('disable', 'true');
+            spikeplot.drawSpikeTrain(spiketrain[2], 'spiketrain_02', '#0099ff');
+          });
+        });
       });
     </script>
   </body>
