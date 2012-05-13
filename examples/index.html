@@ -53,6 +53,10 @@
         <button id="spike-action-add">add spike</button>
       </div>
 
+      <h2>Preset domain</h2>
+      <div id="preset-domain-plot" style="width:600px;height: 300px;">
+      </div>
+
       <h2>Bizarre colors</h2>
       <div id="plot-here3" style="width:600px;height: 300px;">
       </div>
@@ -178,6 +182,16 @@
             spikeplot.drawSpikeTrain(spiketrain[2], 'spiketrain_02', '#0099ff');
           });
         });
+
+        window.preset = crayon.init('div#preset-domain-plot',
+        { 
+          interaction : { selections: false }
+        });
+        
+        preset.fixDomain([0, 1000]);
+        preset.drawSpikeTrain(spiketrain[1], 'spiketrain_02',
+        '#ff9900');
+        preset.drawSignal(signals[2], 'signal_03');
       });
     </script>
   </body>
