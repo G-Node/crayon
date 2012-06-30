@@ -8,26 +8,34 @@ crayon.bus.subscribe('FirstDraw', function(event, context, data) {
                        'scale(1,-1)'
   );
 
+  context.drawAxes();
+});
+
+crayon.handle.drawAxes = function() {
+  // ensures that axes are the top most group
+  this.grid.selectAll('g.axes').remove();
+
   // draw axes
-  context.axes = context.grid
+  this.axes = this.grid
     .append('g')
     .attr('class', 'axes');
  
-  context.axes // y axis
+  this.axes // y axis
     .append('line')
     .attr('x1', '0')
     .attr('y1', '0')
     .attr('x2', '0')
-    .attr('y2', context.h);
+    .attr('y2', this.h);
 
-  context.axes // x axis
+  this.axes // x axis
     .append('line')
     .attr('x1', '0')
     .attr('y1', '0')
-    .attr('x2', context.w) 
+    .attr('x2', this.w) 
     .attr('y2', '0');
 
-});
+  return;
+};
 
 crayon.bus.subscribe('DomainChanged', function(event, context, data) {
   var x = context.x;
@@ -69,6 +77,8 @@ crayon.bus.subscribe('DomainChanged', function(event, context, data) {
   context.xrules
     .transition()
     .style('opacity', '1');
+
+  context.drawAxes();
 });
 
 crayon.bus.subscribe('RangeChanged', function(event, context, data) {
@@ -110,4 +120,6 @@ crayon.bus.subscribe('RangeChanged', function(event, context, data) {
   context.yrules
     .transition()
     .style('opacity', '1');
+
+  context.drawAxes();
 });

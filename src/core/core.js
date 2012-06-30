@@ -85,7 +85,27 @@ window.crayon = (function() {
     }
 
     return flag;
+  },
+
+  fixDomain = function (domain) {
+    /* pass a [xmin, xmax] array to this function.  This calls
+     * updateDomain once and then rewrites updateDomain as a
+     * null-function that doesn't really do anything other than return
+     * false.
+     *
+     * NOTE: This function must be called before adding any signals or
+     * spikes which may extend the domain you are trying to establish
+     * via this function.
+     */
+    var context = this,
+        rtn = context.updateDomain(domain);
+    context.updateDomain = function (domain) {
+      return false;
+    };
+
+    return rtn;
   }
+
 
   // This sets up the initialization functions which should work like :
   //  <script>
@@ -148,6 +168,7 @@ window.crayon = (function() {
 
     handle.updateDomain = updateDomain;
     handle.updateRange = updateRange;
+    handle.fixDomain = fixDomain;
 
     handle.element = element;
 

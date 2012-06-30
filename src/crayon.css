@@ -14,7 +14,8 @@ svg g#grid {
 
 .xrule text {
   shape-rendering: crispEdges;
-  font-size: 0.8em;
+  font-size: 0.6em;
+  font-family: "Lucida Sans Unicode", helveltica, sans-serif;
 }
 
 .yrule line {
@@ -24,7 +25,8 @@ svg g#grid {
 
 .yrule text {
   shape-rendering: crispEdges;
-  font-size: 0.8em;
+  font-size: 0.6em;
+  font-family: "Lucida Sans Unicode", helvetica, sans-serif;
 }
 
 .axes line {
