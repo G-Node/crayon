@@ -16,6 +16,8 @@ crayon.drag_init = function (context) {
                        'scale(1,-1)'
     );
 
+  // Clear all existing handlers.
+  $(div).unbind();
 
   var rect = context.overlay.append('rect')
     .attr('x', 0)
@@ -87,4 +89,8 @@ crayon.drag_init = function (context) {
         }
     });
   }
+
+  crayon.bus.subscribe('DomainChanged', function(event, context) {
+    crayon.drag_init(context);
+  });
 };
