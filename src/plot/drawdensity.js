@@ -45,7 +45,7 @@ var drawDensityPlot = function (data, name, color) {
 var _drawAllDensities = function (event, context, data, name, ymax, color) {
   context.density.html('');
   
-  var i
+  var i 
 
     , density_data  = context.density_data
     , density_color = context.density_color
@@ -63,11 +63,7 @@ var _drawAllDensities = function (event, context, data, name, ymax, color) {
 
       , color1 = d3.hsl(d3.hsl(density_color[i]).h,
                         d3.hsl(density_color[i]).s, 0.9)
-      , color = d3.interpolateHsl(color1, color0)
-
- ;
-
-
+      , color = d3.interpolateHsl(color1, color0);
 
     context.density
       .append('g')
