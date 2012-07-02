@@ -8,8 +8,9 @@ crayon.bus.subscribe('FirstDraw', function (event, context, data) {
         + 'scale(1,-1)'
   );
 
-  context.density_data = [];
-  context.density_color = [];
+  context.density_data  = []; // stores the arrays
+  context.density_limit = []; // stores the [xmin, xmax, ymax]
+  context.density_color = []; // stores the colors assigned
 });
 
 var drawDensityPlot = function (data, name, color) {
@@ -34,21 +35,25 @@ var drawDensityPlot = function (data, name, color) {
     ymax = (ymax < u.y) ? u.y : ymax;
   }
 
+  context.density_limit.push({'xmin': xmin, 'xmax': xmax,
+                              'ymax': ymax});
+
   context.updateDomain([xmin, xmax]);
 
   // create the x and y coordinate mappings
-  crayon.bus.publish('DensityPlotAdded', [context, data, name, ymax, color]);
+  crayon.bus.publish('DensityPlotAdded', [context]);
 
   return color;
 }
 
-var _drawAllDensities = function (event, context, data, name, ymax, color) {
-  context.density.html('');
+var _drawAllDensities = function (event, context) {
+  context.density.selectAll('g').remove();
   
   var i 
 
     , density_data  = context.density_data
     , density_color = context.density_color
+    , density_limit = context.density_limit
     , n             = (density_data.length < 2) ? 2 : density_data.length
     , available_h   = context.h
 
@@ -63,7 +68,15 @@ var _drawAllDensities = function (event, context, data, name, ymax, color) {
 
       , color1 = d3.hsl(d3.hsl(density_color[i]).h,
                         d3.hsl(density_color[i]).s, 0.9)
-      , color = d3.interpolateHsl(color1, color0);
+      , color = d3.interpolateHsl(color1, color0)
+
+      , limit = density_limit[i]
+      
+      , ymax  = limit.ymax
+
+      , plot_width = context.w * (limit.xmax - limit.xmin) 
+                      / (context.xmax - context.xmin) 
+      , cell_width = plot_width / density_data[i].length;
 
     context.density
       .append('g')
@@ -76,7 +89,7 @@ var _drawAllDensities = function (event, context, data, name, ymax, color) {
           return context.x(d.x);
         })
       .attr('y', y1)
-      .attr('width', 10)
+      .attr('width', cell_width)
       .attr('height', dense_height) 
       .style('fill', function (d) {
           return color((d.y/ymax));
