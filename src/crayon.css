@@ -44,3 +44,7 @@ g.overlay rect {
   stroke: #0089ff;
   shape-rendering: crispEdges;
 }
+
+g#density rect {
+  stroke-width: 0px;
+}

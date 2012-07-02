@@ -61,6 +61,10 @@
       <div id="plot-here3" style="width:600px;height: 300px;">
       </div>
 
+      <h2>Density Maps</h2>
+      <div id="plot-dense" style="width:600px;height: 300px;">
+      </div>
+
     </div>
     <script src="../lib/jquery/jquery.js"></script>
     <script src="../lib/d3/d3.js"></script>
@@ -131,6 +135,28 @@
             { x:138, y: 187},
             { x:139, y: 278},
             { x:140, y: 109}
+          ],
+          [
+            {x: 5, y: 55},
+            {x: 10, y: 25},
+            {x: 15, y: 79},
+            {x: 20, y: 77},
+            {x: 25, y: 51},
+            {x: 30, y: 212},
+            {x: 35, y: 75},
+            {x: 40, y: 192},
+            {x: 45, y: 107},
+            {x: 50, y: 37},
+            {x: 55, y: 185},
+            {x: 60, y: 117},
+            {x: 65, y: 44},
+            {x: 70, y: 173},
+            {x: 75, y: 38},
+            {x: 80, y: 101},
+            {x: 85, y: 212},
+            {x: 90, y: 200},
+            {x: 95, y: 180},
+            {x: 100, y: 38}
           ]
         ];
 
@@ -192,6 +218,11 @@
         preset.drawSpikeTrain(spiketrain[1], 'spiketrain_02',
         '#ff9900');
         preset.drawSignal(signals[2], 'signal_03');
+
+        window.dense = crayon.init('div#plot-dense');
+        
+        dense.drawDensityPlot(signals[2], 'signal_03', '#005480');
+        dense.drawDensityPlot(signals[3], 'signal_02', '#890040');
       });
     </script>
   </body>

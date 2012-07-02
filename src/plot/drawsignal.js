@@ -52,7 +52,7 @@ crayon.bus.subscribe('SignalAdded', function (event, context, data, name, color)
     );
 });
 
-var scale = function(event, context, data) {
+var scaleSignals = function(event, context, data) {
   if ( data.ol != data.ne ){
     context.signals
       .selectAll('path')
@@ -64,7 +64,7 @@ var scale = function(event, context, data) {
   }
 }
 
-crayon.bus.subscribe('RangeChanged', scale);
-crayon.bus.subscribe('DomainChanged', scale);
+crayon.bus.subscribe('RangeChanged', scaleSignals);
+crayon.bus.subscribe('DomainChanged', scaleSignals);
 
 crayon.handle.drawSignal = drawSignal;

@@ -17,3 +17,15 @@ def spiketrain(start, stop, step = 15):
 
     print "%d," %(t)
     
+
+def signal(start, stop, ymin, ymax, step = 15):
+  t = start
+
+  while ( t < stop ):
+    t += step
+    y = randint(ymin, ymax)
+
+    print "{x: %d, y: %d}," %(t, y)
+
+
+
