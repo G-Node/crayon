@@ -1,14 +1,16 @@
 // ---------- file: cry/context.js ---------- //
 
-// Augment module cry with d3 import
-var cry = (function(mod, d3) {
+// Augment module 'cry' and import d3 locally
+var cry; (function(cry, d3) {
   "use strict";
 
-  /**
+  /*******************************************************************************
    * Class cry.Context.
    * A context can be used by a renderer to draw a plot.
-   */
-  mod.Context = (function() {
+   *
+   * @returns {Function} Constructor for Context.
+   ******************************************************************************/
+  cry.Context = (function() {
 
     /**
      * Constructor of the class cry.Context.
@@ -19,7 +21,7 @@ var cry = (function(mod, d3) {
      * @param opt       Other options for the context: width, height, xmin, xmax,
      *                  padd, xticks, yticks, onselect.
      */
-    function Context(parent, name, otp) {
+    function Context(parent, name, opt) {
       var opt = opt || {};
       // initialize d3 handle for svg
       this._svg = parent.append('g');
@@ -85,9 +87,8 @@ var cry = (function(mod, d3) {
         this._xmin = _adjust(xmin);
         this.redraw();
         return this;
-      } else {
-        return this._xmin;
       }
+      return this._xmin;
     };
 
     Context.prototype.xmax = function(xmax) {
@@ -95,9 +96,8 @@ var cry = (function(mod, d3) {
         this._xmax = _adjust(xmax);
         this.redraw();
         return this;
-      } else {
-        return this._xmax;
       }
+      return this._xmax;
     };
 
     Context.prototype.ymin = function(ymin) {
@@ -105,9 +105,8 @@ var cry = (function(mod, d3) {
         this._ymin = _adjust(ymin);
         this.redraw();
         return this;
-      } else {
-        return this._ymin;
       }
+      return this._ymin;
     };
 
     Context.prototype.ymax = function(ymax) {
@@ -115,9 +114,8 @@ var cry = (function(mod, d3) {
         this._ymax = _adjust(ymax);
         this.redraw();
         return this;
-      } else {
-        return this._ymax;
       }
+      return this._ymax;
     };
 
     Context.prototype.xticks = function(xticks) {
@@ -125,9 +123,8 @@ var cry = (function(mod, d3) {
         this._xticks = Math.round(xticks);
         this.redraw();
         return this;
-      } else {
-        return this._xticks;
       }
+      return this._xticks;
     };
 
     Context.prototype.yticks = function(yticks) {
@@ -135,9 +132,8 @@ var cry = (function(mod, d3) {
         this._yticks = Math.round(yticks);
         this.redraw();
         return this;
-      } else {
-        return this._yticks;
       }
+      return this._yticks;
     };
 
     Context.prototype.width = function(width) {
@@ -145,9 +141,8 @@ var cry = (function(mod, d3) {
         this._width = Math.round(width);
         this.redraw();
         return this;
-      } else {
-        return this._width;
       }
+      return this._width;
     };
 
     Context.prototype.height = function(height) {
@@ -155,9 +150,8 @@ var cry = (function(mod, d3) {
         this._height = Math.round(height);
         this.redraw();
         return this;
-      } else {
-        return this._height;
       }
+      return this._height;
     };
 
     Context.prototype.onselect = function(onselect) {
@@ -165,9 +159,8 @@ var cry = (function(mod, d3) {
         this._onselect = onselect;
         this.redraw();
         return this;
-      } else {
-        return this._onselect;
       }
+      return this._onselect;
     };
 
     Context.prototype.options = function(opt) {
@@ -252,7 +245,7 @@ var cry = (function(mod, d3) {
     };
 
     function _adjust(val) {
-      var x, sign = 1, div = 1;
+      var x, sign = 1;
       if (Math.abs(val) > 0) {
         if (val < 0) {
           sign = -1;
@@ -261,14 +254,13 @@ var cry = (function(mod, d3) {
           x = Math.ceil(val);
         }
         return x * sign;
-      } else {
-        return val;
       }
+      return val;
     }
 
     return Context;
   })(); // end class context
 
   return mod;
-})(cry || {}, d3); // end module cry
+})(cry || (cry = {}), d3); // end module cry
 

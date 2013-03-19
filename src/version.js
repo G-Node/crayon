@@ -1,4 +1,4 @@
-// ---------- file: cry/version.js ---------- //
+// ---------- file: version.js ---------- //
 
 
 // Crayon main module cry
