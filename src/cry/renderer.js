@@ -119,6 +119,7 @@ var cry; (function(cry) {
     /**
      * Constructor for the class Spike renderer.
      */
+    SpikeRenderer.inherits(cry.Renderer);
     function SpikeRenderer() {
       this.parent.constructor.call(this, 'spike');
     }

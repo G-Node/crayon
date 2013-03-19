@@ -261,6 +261,5 @@ var cry; (function(cry, d3) {
     return Context;
   })(); // end class context
 
-  return mod;
 })(cry || (cry = {}), d3); // end module cry
 

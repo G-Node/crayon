@@ -1,5 +1,5 @@
 # js compiler
-JSC = uglifyjs --no-copyright 
+JSC = uglifyjs --no-copyright --no-mangle --no-squeeze --lift-vars
 # CSS compiler
 CSSC = lessc
 

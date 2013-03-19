@@ -15,13 +15,12 @@
     
     pm.createContext('signal');
     pm.addRenderer('signal', new cry.SignalRenderer());
-    pm.addSource('signal', 'signal', new cry.SineSignal(150, 4, 100, 50));
+    pm.addSource(new cry.RandomSignal(150, 4, 1000, 3), 'signal', 'signal');
     
     pm.createContext('spike', {yticks: 0, onselect: onselect});
     pm.addRenderer('spike', new cry.SpikeRenderer());
-    pm.addSource('spike', 'spike', new cry.SpikeTrain(150, 100, 15));
+    pm.addSource(new cry.RandomSpikes(150, 1000, 10), 'spike', 'spike');
 
-    pm.plot();
     pm.plot();
     
     function onselect(x1, x2) {
