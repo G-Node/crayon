@@ -19,12 +19,12 @@ CSS_SRC = $(wildcard src/cry/*.less)
 
 JS_SRC_EXTRA = 
 
-all: clean extra static/crayon.js static/crayon-min.js static/crayon.less static/crayon.css
+all: clean extra $(OUT_DIR_JS)/$(OUT_NAME)-min.js $(OUT_DIR_CSS)/$(OUT_NAME).css
 
 $(OUT_DIR_JS)/$(OUT_NAME).js: $(JS_SRC_MAIN) $(JS_SRC)
 		cat $(JS_SRC_MAIN) $(JS_SRC) > $(OUT_DIR_JS)/$(OUT_NAME).js
 
-$(OUT_DIR_JS)/$(OUT_NAME)-min.js: static/crayon.js
+$(OUT_DIR_JS)/$(OUT_NAME)-min.js: $(OUT_DIR_JS)/$(OUT_NAME).js
 		$(JSC) $(OUT_DIR_JS)/$(OUT_NAME).js > $(OUT_DIR_JS)/$(OUT_NAME)-min.js
 
 $(OUT_DIR_CSS)/$(OUT_NAME).less: $(CSS_SRC_MAIN) $(CSS_SRC)
