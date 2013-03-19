@@ -3,17 +3,16 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="../static/crayon.css" />
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
   <script type="text/javascript" src="../static/d3/d3.js"></script>
   <script type="text/javascript" src="../static/inheritance.js"></script>
   <script type="text/javascript" src="../static/crayon.js"></script>
 </head>
 <script type="text/javascript">
-  var init = function() {
+  function init() {
     var svg = d3.select("#svg-1");
     var c = new cry.Context(svg, "bla");
   };
-  /*$(window).ready(init);*/
+  window.onload = init;
 </script>
 <body>
   <svg id="svg-1" width="1000" height="600"></svg>
