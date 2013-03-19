@@ -1,0 +1,14 @@
+# Backup files
+*~
+*.swp
+
+# Precompiled python
+*.pyc
+
+# js and css inside static (produced by makefile)
+static/crayon*
+
+# Eclipse project settings
+.project
+.settings/
+.externalToolBuilders
