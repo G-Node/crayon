@@ -5,8 +5,15 @@
 var cry; (function(cry) {
   "use strict";
 
-  // current version of the project
+  /**
+   * @define {string}
+   */
   cry.version = "v0.1";
+
+  /**
+   * @define {Boolean}
+   */
+  cry.debug = true;
 
 })(cry || (cry = {}));
 
