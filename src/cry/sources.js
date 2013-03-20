@@ -5,7 +5,6 @@
 var cry; (function(cry) {
   "use strict";
 
-
   /*******************************************************************************
    * Class cry.Source.
    * A source provides data used that can be plotted by a renderer. A source returns
@@ -104,9 +103,11 @@ var cry; (function(cry) {
         // make slice
         var d, s, startpos, endpos;
         for (var i = 0; i < this._data.length; i += 1) {
+
           d = this._data[i];
           s = {style: d.style, name: d.name};
           startpos = 0; endpos = d.data.length - 1;
+
           for (var j = 0; j < d.data.length - 1; j += 2) {
             if (d.data[j] <= start) {
               startpos = j;
@@ -115,18 +116,22 @@ var cry; (function(cry) {
               break;
             }
           }
+
           if (d.data instanceof ArrayBufferView) { // typed arrray
             s.data = d.data.subarray(startpos, endpos);
           } else {                                 // normal array
             s.data = d.data.slice(startpos, endpos);
           }
+
           this._sliced[i] = s;
         }
+
         this._slicedReady = true;
         if (typeof(callback) == 'function')
           callback(this);
+      } else {
+        throw "Source: no data available. Use hasData() to avoid this error.";
       }
-      throw "Source: no data available. Use hasData() to avoid this error.";
     };
 
     /**
@@ -197,7 +202,6 @@ var cry; (function(cry) {
       return border;
     }
 
-
     return Source;
   })(); // end class Source
 
@@ -222,10 +226,20 @@ var cry; (function(cry) {
      */
     RandomSignal.inherits(cry.Source);
     function RandomSignal(xmax, ymax, size, num) {
+      this._dataReady   = false;
+      this._slicedReady = false;
       this._xmax = xmax || 100;
       this._ymax = ymax || 1000;
       this._size = size || 1000;
-      this._num = num || 1;
+      this._num  = num  || 1;
+    }
+
+    /**
+     * Load data into the source.
+     *
+     * @param callback {Function} A callback that is invoked when loading is done.
+     */
+    RandomSignal.prototype.load = function(callback) {
       this._data = new Array(this._num);
       for ( var i = 0; i < this._num; i += 1) {
         var s = _randStyle();
@@ -248,42 +262,9 @@ var cry; (function(cry) {
         }
         this._data[i] = {data : d, style : s};
       }
-    }
-
-    /**
-     * Return all data.
-     *
-     * @returns All data from this source.
-     */
-    RandomSignal.prototype.data = function() {
-      return this._data;
-    };
-
-    /**
-     * Object containing the borders of all data from this source.
-     * Structure: {xmin : num, xmax : num, ymin : num, ymax : num}
-     *
-     * @returns The border values for the current data.
-     */
-    RandomSignal.prototype.borders = function() {
-      var xmin = 0, xmax = 0, ymin = 0, ymax = 0;
-      var all = this._data;
-      for ( var i = 0; i < all.length; i += 1) {
-        var data = all[i].data;
-        for ( var j = 1; j < data.length; j += 2) {
-          var x = data[j - 1];
-          var y = data[j];
-          if (x < xmin)
-            xmin = x;
-          else if (x > xmax)
-            xmax = x;
-          if (y < ymin)
-            ymin = y;
-          else if (y > ymax)
-            ymax = y;
-        }
-      }
-      return {xmin : xmin, xmax : xmax, ymin : ymin, ymax : ymax};
+      this._dataReady = true;
+      if (typeof(callback) == 'function')
+        callback(this);
     };
 
     /**
@@ -323,9 +304,14 @@ var cry; (function(cry) {
      */
     RandomSpikes.inherits(cry.Source);
     function RandomSpikes(xmax, size, num) {
+      this._dataReady   = false;
+      this._slicedReady = false;
       this._xmax = xmax || 100;
       this._size = size || 1000;
-      this._num = num || 1;
+      this._num  = num  || 1;
+    }
+
+    RandomSpikes.prototype.load = function(callback) {
       this._data = new Array(this._num);
       for ( var i = 0; i < this._num; i += 1) {
         var s = _randStyle();
@@ -340,34 +326,9 @@ var cry; (function(cry) {
         }
         this._data[i] = {data : d, style : s};
       }
-    }
-
-    /**
-     * Return all data.
-     *
-     * @returns All data from this source.
-     */
-    RandomSpikes.prototype.data = function() {
-      return this._data;
-    };
-
-    /**
-     * Object containing the borders of all data from this source.
-     * Structure: {xmin : num, xmax : num, ymin : num, ymax : num}
-     *
-     * @returns The border values for the current data.
-     */
-    RandomSpikes.prototype.borders = function() {
-      var all = this._data;
-      var xmin = 0, xmax = 0, ymin = 0, ymax = 0.1;
-      for ( var i = 0; i < all.length; i += 1) {
-        var data = all[i].data;
-        if (data[0] < xmin)
-          xmin = data[0];
-        if (data[data.length - 2] > xmax)
-          xmax = data[data.length - 2];
-      }
-      return {xmin : xmin, xmax : xmax, ymin : ymin, ymax : ymax};
+      this._dataReady = true;
+      if (typeof(callback) == 'function')
+        callback(this);
     };
 
     /**

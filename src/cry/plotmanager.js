@@ -48,7 +48,7 @@ var cry; (function(cry, d3, $) {
       // iterate over sources to calculate global borders
       for (var i in this._sources) {
         source = this._sources[i].source;
-        border = source.borders();
+        border = source.dataBorders();
         if (border.xmin < conf.xmin)
           conf.xmin = border.xmin;
         if (border.xmax > conf.xmax)
