@@ -317,12 +317,11 @@ var cry; (function(cry) {
         var s = _randStyle();
         var d = new Float32Array(this._size * 2);
         var x = 0;
-        var y = i;
         var xstep = (this._xmax / this._size) * 2;
         for ( var j = 1; j < this._size * 2; j += 2) {
           x += Math.random() * xstep;
           d[j - 1] = x;
-          d[j] = y;
+          d[j] = 0.01;
         }
         this._data[i] = {data : d, style : s};
       }
