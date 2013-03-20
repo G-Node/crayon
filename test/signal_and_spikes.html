@@ -27,6 +27,9 @@
       x1 = x1 || 0; x2 = x2 || 0;
       console.log("select: x1 = " + x1 + " / x2 = " + x2);
     }
+    
+    /* make global for debugging and testing */
+    window.run = {svg: svg, pm: pm};
   }
   window.onload = init;
 </script>

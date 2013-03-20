@@ -10,8 +10,13 @@
 </head>
 <script type="text/javascript">
   function init() {
-    var svg = d3.select("#svg-1");
-    var c = new cry.Context(svg, "bla");
+    var svg = d3.select("#svg-1"); 
+    var pm  = new cry.PlotManager(svg);
+
+    pm.createContext('signal');
+    
+    /* make global for debugging and testing */
+    window.run = {svg: svg, pm: pm};
   };
   window.onload = init;
 </script>
