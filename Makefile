@@ -1,30 +1,44 @@
-JS_COMPILER = uglifyjs
+# js compiler
+JSC = uglifyjs --no-copyright --no-mangle --no-squeeze --lift-vars
+# CSS compiler
+CSSC = lessc
 
-COMPILATION_UNIT = src/start.js \
-									 src/core/core.js \
-									 src/core/version.js \
-								   src/end.js \
-								   src/domReadyStart.js \
-									 src/core/clear.js \
-									 src/core/color.js \
-									 src/grid/grid.js \
-									 src/plot/drawsignal.js \
-									 src/plot/drawdensity.js \
-									 src/plot/drawspiketrain.js \
-									 src/event/drag.js \
-								 	 src/domReadyEnd.js
+# output
+OUT_DIR     = static
+OUT_DIR_JS  = $(OUT_DIR)
+OUT_DIR_CSS = $(OUT_DIR)
+OUT_NAME    = crayon
 
-all: crayon.js crayon.css
 
-crayon.js: $(COMPILATION_UNIT)
-	cat $(COMPILATION_UNIT) > crayon.js
+# sources
+JS_SRC_MAIN  = $(wildcard src/*.js)
+CSS_SRC_MAIN = $(wildcard src/*.less)
 
-crayon.css: src/crayon.css
-	cp src/crayon.css crayon.css
+JS_SRC  = $(wildcard src/cry/*.js)
+CSS_SRC = $(wildcard src/cry/*.less)
 
-crayon.min.js: crayon.js
-	$(JS_COMPILER) < crayon.js > crayon.min.js
+JS_SRC_EXTRA = 
+
+all: clean extra $(OUT_DIR_JS)/$(OUT_NAME)-min.js $(OUT_DIR_CSS)/$(OUT_NAME).css
+
+$(OUT_DIR_JS)/$(OUT_NAME).js: $(JS_SRC_MAIN) $(JS_SRC)
+		cat $(JS_SRC_MAIN) $(JS_SRC) > $(OUT_DIR_JS)/$(OUT_NAME).js
+
+$(OUT_DIR_JS)/$(OUT_NAME)-min.js: $(OUT_DIR_JS)/$(OUT_NAME).js
+		$(JSC) $(OUT_DIR_JS)/$(OUT_NAME).js > $(OUT_DIR_JS)/$(OUT_NAME)-min.js
+
+$(OUT_DIR_CSS)/$(OUT_NAME).less: $(CSS_SRC_MAIN) $(CSS_SRC)
+		cat $(CSS_SRC_MAIN) $(CSS_SRC) > $(OUT_DIR_CSS)/$(OUT_NAME).less
+
+$(OUT_DIR_CSS)/$(OUT_NAME).css: $(OUT_DIR_CSS)/$(OUT_NAME).less
+		$(CSSC) $(OUT_DIR_CSS)/$(OUT_NAME).less > $(OUT_DIR_CSS)/$(OUT_NAME).css
+
+.PHONY: extra
+extra:
+		for i in $(JS_SRC_EXTRA); do $(JSC) $$i > $(OUT_DIR_JS)/`basename $$i` ; done
 
 .PHONY: clean
 clean:
-	rm -rf crayon*.js
+		rm -rf $(OUT_DIR_JS)/$(OUT_NAME)*
+		for i in $(JS_SRC_EXTRA); do rm -rf $(OUT_DIR_JS)/`basename $$i` ; done
+

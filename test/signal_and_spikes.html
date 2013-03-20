@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="../static/crayon.css" />
+  <script type="text/javascript" src="../static/jquery/jquery.js"></script>
+  <script type="text/javascript" src="../static/d3/d3.js"></script>
+  <script type="text/javascript" src="../static/inheritance.js"></script>
+  <script type="text/javascript" src="../static/crayon.js"></script>
+</head>
+<script type="text/javascript">
+  function init() {
+    var svg = d3.select("#svg-1"); 
+    var pm  = new cry.PlotManager(svg);
+
+    pm.createContext('signal');
+    pm.addRenderer('signal', new cry.SignalRenderer());
+    pm.addSource(new cry.RandomSignal(150, 4, 1000, 3), 'signal', 'signal');
+
+    pm.createContext('spike', {yticks: 0, onselect: onselect});
+    pm.addRenderer('spike', new cry.SpikeRenderer());
+    pm.addSource(new cry.RandomSpikes(150, 1000, 10), 'spike', 'spike');
+
+    pm.plot();
+
+    function onselect(x1, x2) {
+      x1 = x1 || 0; x2 = x2 || 0;
+      console.log("select: x1 = " + x1 + " / x2 = " + x2);
+    }
+    
+    /* make global for debugging and testing */
+    window.run = {svg: svg, pm: pm};
+  }
+  window.onload = init;
+</script>
+<body>
+  <svg id="svg-1" width="1000" height="600"></svg>
+</body>
+</html>
