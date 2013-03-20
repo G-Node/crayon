@@ -1,7 +1,7 @@
 // ---------- file: cry/plotmanager.js ---------- //
 
 // Augment the module cry and import d3 locally.
-var cry; (function(cry, d3) {
+var cry; (function(cry, d3, $) {
   "use strict";
 
   /*******************************************************************************
@@ -23,6 +23,8 @@ var cry; (function(cry, d3) {
         this._svg = d3.select('#'+svg);
       else
         this._svg = svg;
+      // crate a message bus
+      this._bus = new CryBus();
       // structure for renderer:
       // {<name>: <renderer>, ...}
       this._renderer = {};
@@ -129,5 +131,83 @@ var cry; (function(cry, d3) {
     return PlotManager;
   })();
 
-})(cry || (cry = {}), d3); // end module cry
+  /*******************************************************************************
+   * A private bus class that is used internally for messaging.
+   *
+   * @returns {CryBus}
+   ******************************************************************************/
+   var CryBus = (function() {
+
+    /**
+     * Constructor for a private bus class.
+     *
+     * @constructor
+     * @this {CryBus}
+     */
+    function CryBus() {
+      this.onerror = function(event, data) {
+        if (data && data.error && console) {
+          console.log('CryBus (ERROR): event = ' + event + ' // error' + data.response || data.error);
+          return false;
+        }
+        return true;
+      };
+    }
+
+    /**
+     * Subscribe a function to a specific event.
+     *
+     * @param event {string}    The event name.
+     * @param fn {Function}     The function to call when events are published.
+     *
+     * @return {CryBus} The event bus.
+     */
+    CryBus.prototype.subscribe = function(event, fn) {
+      if (cry.debug && console)
+        console.log('CryBus (DEBUG): subscribe event ' + event);
+      $(this).bind(event, fn);
+      return this;
+    };
+
+    /**
+     * Unsubscribe a specific event.
+     *
+     * @param event {string}    The event name.
+     *
+     * @return {CryBus} The event bus.
+     */
+    CryBus.prototype.unsubscribe = function(event) {
+      if (cry.debug && console)
+        console.log('CryBus (DEBUG): unsubscribe event ' + event);
+      $(this).unbind(event);
+      return this;
+    };
+
+    /**
+     * Fire a specific event.
+     *
+     * @param event {string}    The event name.
+     * @param data {Object}     The data that will be passed to the event handler function
+     *                          along with the event.
+     *
+     * @return {CryBus} The event bus.
+     */
+    CryBus.prototype.publish = function(event, data) {
+      if (this.onerror(event, data)) {
+        if (cry.debug && console) {
+          var d = data || 'none';
+          console.log('CryBus (DEBUG): publish event ' + event + ' // data = ' + JSON.stringify(d));
+        }
+        $(this).trigger(event, data);
+      } else if (console) {
+        var d = data || 'none';
+        console.log('CryBus (DEBUG): event not published due to errors // data = ' + JSON.stringify(d));
+      }
+      return this;
+    };
+
+    return CryBus;
+  })();
+
+})(cry || (cry = {}), d3, jQuery); // end module cry
 
