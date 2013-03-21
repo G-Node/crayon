@@ -240,29 +240,31 @@ var cry; (function(cry) {
      * @param callback {Function} A callback that is invoked when loading is done.
      */
     RandomSignal.prototype.load = function(callback) {
-      this._data = new Array(this._num);
-      for ( var i = 0; i < this._num; i += 1) {
-        var s = _randStyle();
-        var d = new Float32Array(this._size * 2);
-        var x = 0;
-        var y;
-        var xstep = this._xmax / this._size;
+      if (!this._dataReady) {
+        this._data = new Array(this._num);
+        for ( var i = 0; i < this._num; i += 1) {
+          var s = _randStyle();
+          var d = new Float32Array(this._size * 2);
+          var x = 0;
+          var y;
+          var xstep = this._xmax / this._size;
 
-        var a1 = this._ymax,
-            phi1 = (Math.random() * Math.PI),
-            o1 = Math.PI * ((Math.random() * 5 + 5) / this._xmax);
-        var a2 = (Math.random() * this._ymax / 5),
-            phi2 = (Math.random() * Math.PI),
-            o2 = Math.PI * ((Math.random() * 50 + 50) / this._xmax);
-        for ( var j = 1; j < this._size * 2; j += 2) {
-          y = Math.sin(x * o1 + phi1) * a1 + Math.sin(x * o2 + phi2) * a2;
-          d[j - 1] = x;
-          d[j] = y;
-          x += xstep;
+          var a1 = this._ymax,
+              phi1 = (Math.random() * Math.PI),
+              o1 = Math.PI * ((Math.random() * 5 + 5) / this._xmax);
+          var a2 = (Math.random() * this._ymax / 5),
+              phi2 = (Math.random() * Math.PI),
+              o2 = Math.PI * ((Math.random() * 50 + 50) / this._xmax);
+          for ( var j = 1; j < this._size * 2; j += 2) {
+            y = Math.sin(x * o1 + phi1) * a1 + Math.sin(x * o2 + phi2) * a2;
+            d[j - 1] = x;
+            d[j] = y;
+            x += xstep;
+          }
+          this._data[i] = {data : d, style : s};
         }
-        this._data[i] = {data : d, style : s};
+        this._dataReady = true;
       }
-      this._dataReady = true;
       if (typeof(callback) == 'function')
         callback(this);
     };
@@ -312,20 +314,22 @@ var cry; (function(cry) {
     }
 
     RandomSpikes.prototype.load = function(callback) {
-      this._data = new Array(this._num);
-      for ( var i = 0; i < this._num; i += 1) {
-        var s = _randStyle();
-        var d = new Float32Array(this._size * 2);
-        var x = 0;
-        var xstep = (this._xmax / this._size) * 2;
-        for ( var j = 1; j < this._size * 2; j += 2) {
-          x += Math.random() * xstep;
-          d[j - 1] = x;
-          d[j] = 0.01;
+      if (!this._dataReady) {
+        this._data = new Array(this._num);
+        for ( var i = 0; i < this._num; i += 1) {
+          var s = _randStyle();
+          var d = new Float32Array(this._size * 2);
+          var x = 0;
+          var xstep = (this._xmax / this._size) * 2;
+          for ( var j = 1; j < this._size * 2; j += 2) {
+            x += Math.random() * xstep;
+            d[j - 1] = x;
+            d[j] = 0.01;
+          }
+          this._data[i] = {data : d, style : s};
         }
-        this._data[i] = {data : d, style : s};
+        this._dataReady = true;
       }
-      this._dataReady = true;
       if (typeof(callback) == 'function')
         callback(this);
     };
