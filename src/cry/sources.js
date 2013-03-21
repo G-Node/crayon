@@ -47,15 +47,22 @@ var cry; (function(cry) {
      * @returns {string} The name of the source.
      */
     Source.prototype.name = function() {
-      return name;
+      return this._name;
+    };
+
+    /**
+     * Crates a string representing the object.
+     *
+     * @returns {string} A string representation of the object.
+     */
+    Source.prototype.toString = function() {
+      return "Source: " + this._name;
     };
 
     /**
      * Load data into the source.
-     *
-     * @param callback {Function} A callback that is invoked when loading is done.
      */
-    Source.prototype.load = function(callback) {
+    Source.prototype.load = function() {
       // implement this in subclass
       console.log("Source.load(): unimplemented method.");
     };
@@ -66,10 +73,10 @@ var cry; (function(cry) {
      * @returns {Array} An array of data objects.
      */
     Source.prototype.data = function() {
-      if (this._dataReady) {
-        return this._data;
+      if (!this._dataReady) {
+        this.load();
       }
-      throw "Source: no data available. Use hasData() to avoid this error.";
+      return this._data;
     };
 
     /**
@@ -78,20 +85,10 @@ var cry; (function(cry) {
      * @returns {{xmin, xmax, ymin, ymax}} An object containing all min and max values.
      */
     Source.prototype.dataBorders = function() {
-      if (this._dataReady) {
-        return _borders(this._data);
+      if (!this._dataReady) {
+        this.load();
       }
-      throw "Source: no data available. Use hasData() to avoid this error.";
-    };
-
-
-    /**
-     * Check for data.
-     *
-     * @returns {Boolean} True if data are available, false otherwise.
-     */
-    Source.prototype.hasData = function() {
-      return this._dataReady;
+      return _borders(this._data);
     };
 
     /**
@@ -121,7 +118,7 @@ var cry; (function(cry) {
           startpos = 0; endpos = d.data.length - 1;
 
           for (var j = 0; j < d.data.length - 1; j += 2) {
-            if (d.data[j] <= start) {
+            if (d.data[j] < start) {
               startpos = j;
             } else if (d.data[j] > end) {
               endpos = j;
@@ -276,8 +273,6 @@ var cry; (function(cry) {
         }
         this._dataReady = true;
       }
-      if (typeof(callback) == 'function')
-        callback(this);
     };
 
     /**
@@ -340,8 +335,6 @@ var cry; (function(cry) {
         }
         this._dataReady = true;
       }
-      if (typeof(callback) == 'function')
-        callback(this);
     };
 
     /**
