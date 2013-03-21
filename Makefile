@@ -1,5 +1,5 @@
 # js compiler
-JSC = uglifyjs --no-copyright --no-mangle --no-squeeze --lift-vars
+JSC = uglifyjs --no-mangle --no-squeeze --lift-vars
 # CSS compiler
 CSSC = lessc
 
@@ -9,6 +9,8 @@ OUT_DIR_JS  = $(OUT_DIR)
 OUT_DIR_CSS = $(OUT_DIR)
 OUT_NAME    = crayon
 
+# license head file
+LICENSE = LICENSE_HEAD
 
 # sources
 JS_SRC_MAIN  = $(wildcard src/*.js)
@@ -22,7 +24,7 @@ JS_SRC_EXTRA =
 all: clean extra $(OUT_DIR_JS)/$(OUT_NAME)-min.js $(OUT_DIR_CSS)/$(OUT_NAME).css
 
 $(OUT_DIR_JS)/$(OUT_NAME).js: $(JS_SRC_MAIN) $(JS_SRC)
-		cat $(JS_SRC_MAIN) $(JS_SRC) > $(OUT_DIR_JS)/$(OUT_NAME).js
+		cat $(LICENSE) $(JS_SRC_MAIN) $(JS_SRC) > $(OUT_DIR_JS)/$(OUT_NAME).js
 
 $(OUT_DIR_JS)/$(OUT_NAME)-min.js: $(OUT_DIR_JS)/$(OUT_NAME).js
 		$(JSC) $(OUT_DIR_JS)/$(OUT_NAME).js > $(OUT_DIR_JS)/$(OUT_NAME)-min.js
