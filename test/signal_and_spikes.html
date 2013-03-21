@@ -15,21 +15,21 @@
     
     pm.createContext('signal');
     pm.addRenderer('signal', new cry.SignalRenderer());
-    var signals = new cry.RandomSignal(150, 4, 10000, 3);
-    signals.load();
+    var signals = new cry.RandomSignal(150, 4, 10000, 5);
+    var signals2 = new cry.RandomSignal(150, 4, 10000, 5);
     pm.addSource(signals, 'signal', 'signal');
 
     pm.createContext('spike', {yticks: 0});
     pm.addRenderer('spike', new cry.SpikeRenderer());
-    var spikes = new cry.RandomSpikes(150, 1000, 10);
-    spikes.load();
+    var spikes = new cry.RandomSpikes(150, 1000, 7);
+    var spikes2 = new cry.RandomSpikes(150, 1000, 7);
     pm.addSource(spikes, 'spike', 'spike');
 
     pm.plot();
 
     
     /* make global for debugging and testing */
-    window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes};
+    window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes, signals2: signals2, spikes2: spikes2};
   }
   window.onload = init;
 </script>
