@@ -6,11 +6,15 @@ var cry; (function(cry) {
   "use strict";
 
   /**
+   * The version of the crayon library.
+   *
    * @define {string}
    */
   cry.version = "v0.1";
 
   /**
+   * Activate or deactivate debug mode.
+   *
    * @define {Boolean}
    */
   cry.debug = true;
