@@ -23,20 +23,32 @@ var cry; (function(cry) {
    ******************************************************************************/
   cry.Source = (function() {
 
+    var scount = 0;
+
     /**
      * Constructor for the class source.
      *
      * @constructor
      * @this {Source}
-     * @param num {number}    Number of data in this source (optional).
+     *
+     * @param name {string}   The name of the source (optional).
      */
-    function Source(num) {
-      var num = num || 0;
-      this._data   = new Array(num);
-      this._sliced = new Array(num);
+    function Source(name) {
+      this._name   = name || 'source-' + (scount += 1);
+      this._data   = [];
+      this._sliced = [];
       this._dataReady   = false;
       this._slicedReady = false;
     }
+
+    /**
+     * Returns the name of the source.
+     *
+     * @returns {string} The name of the source.
+     */
+    Source.prototype.name = function() {
+      return name;
+    };
 
     /**
      * Load data into the source.
@@ -226,8 +238,7 @@ var cry; (function(cry) {
      */
     RandomSignal.inherits(cry.Source);
     function RandomSignal(xmax, ymax, size, num) {
-      this._dataReady   = false;
-      this._slicedReady = false;
+      this.parent.constructor.call(this);
       this._xmax = xmax || 100;
       this._ymax = ymax || 1000;
       this._size = size || 1000;
@@ -306,8 +317,7 @@ var cry; (function(cry) {
      */
     RandomSpikes.inherits(cry.Source);
     function RandomSpikes(xmax, size, num) {
-      this._dataReady   = false;
-      this._slicedReady = false;
+      this.parent.constructor.call(this);
       this._xmax = xmax || 100;
       this._size = size || 1000;
       this._num  = num  || 1;
