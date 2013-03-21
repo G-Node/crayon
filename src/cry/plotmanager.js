@@ -23,8 +23,9 @@ var cry; (function(cry, d3, $) {
         this._svg = d3.select('#'+svg);
       else
         this._svg = svg;
-      // crate a message bus
+      // crate a message bus and register render handlers
       this._bus = new CryBus();
+      this._bus.subscribe('slice', this._renderOnSlice());
       // structure for renderer:
       // {<name>: <renderer>, ...}
       this._renderer = {};
@@ -83,6 +84,33 @@ var cry; (function(cry, d3, $) {
         if (context.name() == this._default) {
           renderer.render(this._selcontext, source.source);
         }
+      }
+    };
+
+    PlotManager.prototype.plotSlice = function(x1, x2) {
+      var conf = {xmin: x1, xmax: x2, ymin: 0, ymax: 0};
+      var source, context, border, renderer;
+      // iterate over sources to calculate global borders
+      for (var i in this._sources) {
+        source = this._sources[i].source;
+        border = source.dataBorders();
+        if (border.ymin < conf.ymin)
+          conf.ymin = border.ymin;
+        if (border.ymax > conf.ymax)
+          conf.ymax = border.ymax;
+      }
+
+      // call clear on all renderer
+      for (var i in this._renderer) { this._renderer[i].clear(); }
+
+      /// iterate over contexts and set global borders
+      for (var i in this._contexts) {
+        this._contexts[i].options(conf);
+      }
+
+      // request sliced data from source
+      for (var i in this._sources) {
+        this._sources[i].source.slice(x1, x2, this._sliceNotify());
       }
     };
 
@@ -153,12 +181,42 @@ var cry; (function(cry, d3, $) {
     PlotManager.prototype._onselect = function() {
       if (!this._onselectHandler) {
         var that = this;
-        this._onselectHandler = function() {
-          console.log("PlotManager.prototype._onselect()");
+        this._onselectHandler = function(x1, x2) {
+          that.plotSlice(x1, x2);
         };
       }
       return this._onselectHandler;
     };
+
+    PlotManager.prototype._sliceNotify = function() {
+      if (!this._sliceNotifyHandler) {
+        var that = this;
+        this._sliceNotifyHandler = function(source) {
+          that._bus.publish('slice', source);
+        };
+      }
+      return this._sliceNotifyHandler;
+    }
+
+    PlotManager.prototype._renderOnSlice = function() {
+      var that = this;
+      return function(event, source) {
+        // iterate over sources and plot all data
+        for (var i in that._sources) {
+          var sconf = that._sources[i];
+          var name  = sconf.source.name();
+          if (name == source.name()) {
+            console.log("PlotManager.renderOnSlice() source: " + source.name());
+            var context  = that._contexts[sconf.context];
+            var renderer = that._renderer[sconf.renderer];
+            renderer.render(context, source, true);
+            if (context.name() == that._default) {
+              renderer.render(that._selcontext, source);
+            }
+          }
+        }
+      };
+    }
 
     return PlotManager;
   })();
@@ -228,12 +286,12 @@ var cry; (function(cry, d3, $) {
       if (this.onerror(event, data)) {
         if (cry.debug && console) {
           var d = data || 'none';
-          console.log('CryBus (DEBUG): publish event ' + event + ' // data = ' + JSON.stringify(d));
+          console.log('CryBus (DEBUG): publish event ' + event + ' // data = ' + d);
         }
         $(this).trigger(event, data);
       } else if (console) {
         var d = data || 'none';
-        console.log('CryBus (DEBUG): event not published due to errors // data = ' + JSON.stringify(d));
+        console.log('CryBus (DEBUG): event not published due to errors // data = ' + d);
       }
       return this;
     };

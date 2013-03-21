@@ -40,8 +40,9 @@ var cry; (function(cry) {
      *
      * @param context   The context to draw on.
      * @param source    The data source.
+     * @param sliced {Boolean} if true, render sliced data.
      */
-    Renderer.prototype.render = function(context, source) {
+    Renderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
       // this is just a stub
     };
@@ -71,10 +72,14 @@ var cry; (function(cry) {
      * @param context   The context to draw on.
      * @param source    The source providing the data for the plot.
      */
-    SignalRenderer.prototype.render = function(context, source) {
+    SignalRenderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
       var alldata, data, plot, style;
-      alldata = source.data();
+
+      if (sliced)
+        alldata = source.sliced();
+      else
+        alldata = source.data();
 
       if (alldata.length > 0) {
         for (var i = 0; i < alldata.length; i+=1) {
@@ -130,10 +135,14 @@ var cry; (function(cry) {
      * @param context   The context to draw on.
      * @param source    The source of the spiketrain data.
      */
-    SpikeRenderer.prototype.render = function(context, source) {
+    SpikeRenderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
       var alldata, data, plot;
-      alldata = source.data();
+
+      if (sliced)
+        alldata = source.sliced();
+      else
+        alldata = source.data();
 
       context.defs().selectAll('.' + this._class).remove();
 

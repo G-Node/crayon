@@ -15,7 +15,7 @@
     
     pm.createContext('signal');
     pm.addRenderer('signal', new cry.SignalRenderer());
-    var signals = new cry.RandomSignal(150, 4, 1000, 3);
+    var signals = new cry.RandomSignal(150, 4, 10000, 3);
     signals.load();
     pm.addSource(signals, 'signal', 'signal');
 
@@ -29,7 +29,7 @@
 
     
     /* make global for debugging and testing */
-    /*window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes};*/
+    window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes};
   }
   window.onload = init;
 </script>

@@ -31,11 +31,11 @@ var cry; (function(cry, d3) {
       // initialize private members
       this._width   = Math.round(opt.width  || parent.attr('width'));
       this._height  = Math.round(opt.height || parent.attr('height'));
-      this._padd    = _adjust(opt.padd || 20);
-      this._xmin    = _adjust(opt.xmin || 0);
-      this._xmax    = _adjust(opt.xmax || this._width - ((this._padd * 2) + 10));
-      this._ymin    = _adjust(opt.ymin || 0);
-      this._ymax    = _adjust(opt.ymax || this._height - (this._padd * 2));
+      this._padd    = _adjustUp(opt.padd || 20);
+      this._xmin    = _adjustDown(opt.xmin || 0);
+      this._xmax    = _adjustUp(opt.xmax || this._width - ((this._padd * 2) + 10));
+      this._ymin    = _adjustDown(opt.ymin || 0);
+      this._ymax    = _adjustUp(opt.ymax || this._height - (this._padd * 2));
       this._xticks  = (opt.xticks != undefined) ? Math.round(opt.xticks) : 10;
       this._yticks  = (opt.yticks != undefined) ? Math.round(opt.yticks) : 5;
       // initialize scales using d3
@@ -84,7 +84,7 @@ var cry; (function(cry, d3) {
 
     Context.prototype.xmin = function(xmin) {
       if (xmin !== undefined) {
-        this._xmin = _adjust(xmin);
+        this._xmin = _adjustDown(xmin);
         this.redraw();
         return this;
       }
@@ -93,7 +93,7 @@ var cry; (function(cry, d3) {
 
     Context.prototype.xmax = function(xmax) {
       if (xmax !== undefined) {
-        this._xmax = _adjust(xmax);
+        this._xmax = _adjustUp(xmax);
         this.redraw();
         return this;
       }
@@ -102,7 +102,7 @@ var cry; (function(cry, d3) {
 
     Context.prototype.ymin = function(ymin) {
       if (ymin !== undefined) {
-        this._ymin = _adjust(ymin);
+        this._ymin = _adjustDown(ymin);
         this.redraw();
         return this;
       }
@@ -111,7 +111,7 @@ var cry; (function(cry, d3) {
 
     Context.prototype.ymax = function(ymax) {
       if (ymax !== undefined) {
-        this._ymax = _adjust(ymax);
+        this._ymax = _adjustUp(ymax);
         this.redraw();
         return this;
       }
@@ -170,13 +170,13 @@ var cry; (function(cry, d3) {
         if (opt.hasOwnProperty('height'))
           this._height = Math.round(opt.height);
         if (opt.hasOwnProperty('xmin'))
-          this._xmin = _adjust(opt.xmin);
+          this._xmin = _adjustDown(opt.xmin);
         if (opt.hasOwnProperty('xmax'))
-          this._xmax = _adjust(opt.xmax);
+          this._xmax = _adjustUp(opt.xmax);
         if (opt.hasOwnProperty('ymin'))
-          this._ymin = _adjust(opt.ymin);
+          this._ymin = _adjustDown(opt.ymin);
         if (opt.hasOwnProperty('ymax'))
-          this._ymax = _adjust(opt.ymax);
+          this._ymax = _adjustUp(opt.ymax);
         if (opt.hasOwnProperty('xticks'))
           this._xticks = Math.round(opt.xticks);
         if (opt.hasOwnProperty('yticks'))
@@ -254,18 +254,20 @@ var cry; (function(cry, d3) {
       };
     };
 
-    function _adjust(val) {
-      var x, sign = 1;
-      if (Math.abs(val) > 0) {
-        if (val < 0) {
-          sign = -1;
-          x = Math.ceil(Math.abs(val));
-        } else {
-          x = Math.ceil(val);
-        }
-        return x * sign;
+    function _adjustUp(val) {
+      var x = val;
+      if (Math.abs(x) > 0) {
+        x = Math.ceil(x);
       }
-      return val;
+      return x;
+    }
+
+    function _adjustDown(val) {
+      var x = val;
+      if (Math.abs(x) > 0) {
+        x = Math.floor(x);
+      }
+      return x;
     }
 
     return Context;
