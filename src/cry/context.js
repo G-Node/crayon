@@ -235,11 +235,21 @@ var cry; (function(cry, d3) {
 
     Context.prototype.onBrush = function() {
       var that = this;
+      var last = [this.xmin(), this.xmax()];
       return function() {
         var act = that.onselect();
         var ext = that._brush.extent();
-        if (typeof (act) == 'function') {
+        var x1pix = that.xScale(ext[0]);
+        var x2pix = that.xScale(ext[1]);
+        var diff  = x2pix - x1pix;
+        if (diff < 1) {
+          ext[0] = that.xmin();
+          ext[1] = that.xmax();
+        }
+        console.log("Context.onBrush() diff="+diff+" / last=["+last[0]+","+last[1]+"] / ext=["+ext[0]+","+ext[1]+"]");
+        if (typeof (act) == 'function' && (ext[0] != last[0] || ext[1] != last[1])) {
           act(ext[0], ext[1]);
+          last = ext;
         }
       };
     };
