@@ -19,7 +19,7 @@
     signals.load();
     pm.addSource(signals, 'signal', 'signal');
 
-    pm.createContext('spike', {yticks: 0, onselect: onselect});
+    pm.createContext('spike', {yticks: 0});
     pm.addRenderer('spike', new cry.SpikeRenderer());
     var spikes = new cry.RandomSpikes(150, 1000, 10);
     spikes.load();
@@ -27,13 +27,9 @@
 
     pm.plot();
 
-    function onselect(x1, x2) {
-      x1 = x1 || 0; x2 = x2 || 0;
-      console.log("select: x1 = " + x1 + " / x2 = " + x2);
-    }
     
     /* make global for debugging and testing */
-    window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes};
+    /*window.run = {svg: svg, pm: pm, signals: signals, spikes: spikes};*/
   }
   window.onload = init;
 </script>

@@ -37,6 +37,15 @@ var cry; (function(cry, d3, $) {
       // geometry of the svg elment
       this._width  = this._svg.attr('width');
       this._height = this._svg.attr('height');
+
+      // the default context
+      this._default;
+
+      // create a context for selections
+      this._selconfig  = {width: this._width, height: 100, yticks: 2,
+                          onselect: this._onselect()};
+      this._selcontext = new cry.Context(this._svg, 'select', this._selconfig);
+      this._selcontext.svg().attr("transform", "translate(0," + (this._height-this._selconfig.height) + ")");
     }
 
     /**
@@ -62,6 +71,7 @@ var cry; (function(cry, d3, $) {
       for (var i in this._contexts) {
         this._contexts[i].options(conf);
       }
+      this._selcontext.options(conf);
       // call clear on all renderer
       for (var i in this._renderer) { this._renderer[i].clear(); }
       // iterate over sources and plot their data
@@ -70,6 +80,9 @@ var cry; (function(cry, d3, $) {
         context  = this._contexts[source.context];
         renderer = this._renderer[source.renderer];
         renderer.render(context, source.source);
+        if (context.name() == this._default) {
+          renderer.render(this._selcontext, source.source);
+        }
       }
     };
 
@@ -86,20 +99,28 @@ var cry; (function(cry, d3, $) {
         // calculate height for contexts
         var ncontext = 1;
         for (var i in this._contexts) { ncontext += 1; }
-        var height = this._height / ncontext;
+        var height = (this._height-this._selconfig.height) / ncontext;
         // iterate over contexts and set height
         for (var i in this._contexts) { this._contexts[i].height(height); }
-        // create new context
+
+        // define context options
         var opt = options || {};
-        opt.width = this._width;
+
+        // check if context is the default context
+        if (!this._default || opt.isdefalt)
+          this._default = name;
+
+        // create new context
+        opt.width  = this._width;
         opt.height = height;
         this._contexts[name] = new cry.Context(this._svg, name, opt);
-        // function for context translation
-        var translate = function(cont, k) {
-          return "translate(0," + height * k + ")";
-        };
+
         // position contexts
-        this._svg.selectAll('.context').attr("transform", translate);
+        var k = 0;
+        for (var i in this._contexts) {
+          this._contexts[i].svg().attr("transform", "translate(0," + (height * k) + ")");
+          k += 1;
+        }
       }
     };
 
@@ -126,6 +147,17 @@ var cry; (function(cry, d3, $) {
       if (this._contexts[context] && this._renderer[renderer]) {
         this._sources.push({context: context, renderer: renderer, source: source});
       }
+    };
+
+
+    PlotManager.prototype._onselect = function() {
+      if (!this._onselectHandler) {
+        var that = this;
+        this._onselectHandler = function() {
+          console.log("PlotManager.prototype._onselect()");
+        };
+      }
+      return this._onselectHandler;
     };
 
     return PlotManager;
