@@ -10,7 +10,7 @@ var cry; (function(cry) {
    *
    * @define {string}
    */
-  cry.version = "v0.1";
+  cry.version = "v0.2";
 
   /**
    * Activate or deactivate debug mode.
