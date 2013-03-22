@@ -6,7 +6,8 @@ var cry; (function(cry, d3, $) {
 
   /*******************************************************************************
    * Class PlotManager.
-   * Source for random analog signals, that can be used as test data.
+   * The plot manager is the central class of the crayon library, it handles data
+   * sources, contexts and renderer.
    *
    * @returns {Function} Constructor for PlotManager
    ******************************************************************************/
@@ -15,7 +16,7 @@ var cry; (function(cry, d3, $) {
     /**
      * Constructor of the class PlotManager.
      *
-     * @param svg   An svg elements as d3 selection.
+     * @param svg {d3.selection}   An svg elements as d3 selection.
      */
     function PlotManager(svg) {
       // initialize d3 handle for svg
@@ -98,7 +99,13 @@ var cry; (function(cry, d3, $) {
       }
     };
 
-    PlotManager.prototype.plotSlice = function(x1, x2) {
+    /**
+     * Plot only parts of the data.
+     *
+     * @param xmin {number}   The lower border.
+     * @param xmax {number}   The upper border.
+     */
+    PlotManager.prototype.plotSlice = function(xmin, xmax) {
       var conf, source, border;
 
       // calculate borders
@@ -122,25 +129,25 @@ var cry; (function(cry, d3, $) {
         }
         this._borders = $.extend(true, {}, conf);
       }
-      conf.xmin = x1; conf.xmax = x2;
+      conf.xmin = xmin; conf.xmax = xmax;
 
       /// iterate over contexts and set global borders and clear context
       for (var i in this._contexts) {
         this._contexts[i].clear().options(conf);
       }
-      //this._selcontext.clear().options(this._borders);
 
-      // request sliced data from source
+      // request sliced data from source.
+      // when done each source creates a slice event which triggers a plot handler.
       for (var i in this._sources) {
-        this._sources[i].source.slice(x1, x2, this._sliceNotify());
+        this._sources[i].source.slice(xmin, xmax, this._sliceNotify());
       }
     };
 
     /**
      * Create a new context.
      *
-     * @param name      Name of the new context.
-     * @param options   Some options, see cry.Context for more details.
+     * @param name {string}     Name of the new context.
+     * @param options {object}  Some options, see cry.Context for more details.
      */
     PlotManager.prototype.createContext = function(name, options) {
       if (name && !this._contexts[name]) {
@@ -178,8 +185,8 @@ var cry; (function(cry, d3, $) {
     /**
      * Add a new renderer to the plot manager.
      *
-     * @param name      The name of the renderer.
-     * @param renderer  The renderer object.
+     * @param name {string}       The name of the renderer.
+     * @param renderer {Renderer} The renderer object.
      */
     PlotManager.prototype.addRenderer = function(name, renderer) {
       if (name && !this._renderer[name]) {
@@ -190,9 +197,9 @@ var cry; (function(cry, d3, $) {
     /**
      * Add a new source to the manager.
      *
-     * @param source    The source to add.
-     * @param context   Context on which to draw the date from the source.
-     * @param renderer  The renderer to use for this source.
+     * @param source {Source}   The source to add.
+     * @param context {string}  The name of the context on which to draw the data from the source.
+     * @param renderer {string} The name of the renderer to use for the data.
      */
     PlotManager.prototype.addSource = function(source, context, renderer) {
       if (this._contexts[context] && this._renderer[renderer]) {
@@ -201,17 +208,27 @@ var cry; (function(cry, d3, $) {
       }
     };
 
-
+    /**
+     * Creates a hander for selection events of a context.
+     *
+     * @returns {Function}  A select handler.
+     */
     PlotManager.prototype._onselect = function() {
       if (!this._onselectHandler) {
         var that = this;
-        this._onselectHandler = function(x1, x2) {
-          that.plotSlice(x1, x2);
+        this._onselectHandler = function(xmin, xmax) {
+          that.plotSlice(xmin, xmax);
         };
       }
       return this._onselectHandler;
     };
 
+    /**
+     * Creates a handler that can be passed to the slice() method of a source. It produces
+     * an slice event on the message bus.
+     *
+     * @returns {Function} A handler that produces slice events.
+     */
     PlotManager.prototype._sliceNotify = function() {
       if (!this._sliceNotifyHandler) {
         var that = this;
@@ -222,6 +239,12 @@ var cry; (function(cry, d3, $) {
       return this._sliceNotifyHandler;
     };
 
+    /**
+     * Creates a handler for slice events. If this handler recieves an event, it will arrange for all
+     * configured renderers to draw the data to the respective context.
+     *
+     * @returns {Function} A handler for slice events.
+     */
     PlotManager.prototype._renderOnSlice = function() {
       var that = this;
       return function(event, source) {
