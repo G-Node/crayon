@@ -157,7 +157,7 @@ var cry; (function(cry, d3, $) {
           this._contexts[i].clear();
           ncontext += 1;
         }
-        var height = (this._height-this._selconfig.height) / ncontext;
+        var height = (this._height - this._selconfig.height) / ncontext;
         // iterate over contexts and set height
         for (var i in this._contexts) { this._contexts[i].height(height); }
 
@@ -183,6 +183,47 @@ var cry; (function(cry, d3, $) {
     };
 
     /**
+     * Remove an existing context.
+     * TODO: make also the default context removable
+     *
+     * @param name {string} The name of context to remove.
+     */
+    PlotManager.prototype.removeContext = function(name) {
+      // find and remove contexts
+      var removed = false; var ncontext = 0;
+      for (var i in this._contexts) {
+        if (this._contexts[i].name() == name) {
+          this._contexts[i].svg().remove();
+          delete this._contexts[i];
+          removed = true;
+        } else {
+          ncontext += 1;
+        }
+      }
+      if (removed) {
+        // remove also all sources connected to the context
+        var i = 0;
+        while (i < this._sources.length) {
+          if (this._sources[i].context == name) {
+            this._sources.splice(i, 1);
+          } else {
+            i += 1;
+          }
+        }
+
+        // calculate height for each remaining context
+        var height = (this._height - this._selconfig.height) / ncontext;
+        // iterate over contexts and set height
+        var k = 0;
+        for (var i in this._contexts) {
+          this._contexts[i].height(height);
+          this._contexts[i].svg().attr("transform", "translate(0," + (height * k) + ")");
+          k += 1;
+        }
+      }
+    };
+
+    /**
      * Add a new renderer to the plot manager.
      *
      * @param name {string}       The name of the renderer.
@@ -191,6 +232,28 @@ var cry; (function(cry, d3, $) {
     PlotManager.prototype.addRenderer = function(name, renderer) {
       if (name && !this._renderer[name]) {
         this._renderer[name] = renderer;
+      }
+    };
+
+    /**
+     * Remove a renderer from the plot manager.
+     *
+     * @param name {string}   The name of the renderer to remove
+     */
+    PlotManager.prototype.removeRenderer = function(name) {
+      if (this._renderer.hasOwnProperty(name)) {
+
+        delete this._renderer[name];
+
+        // remove also all sources connected to the renderer
+        var i = 0;
+        while (i < this._sources.length) {
+          if (this._sources[i].renderer == name) {
+            this._sources.splice(i, 1);
+          } else {
+            i += 1;
+          }
+        }
       }
     };
 
@@ -205,6 +268,22 @@ var cry; (function(cry, d3, $) {
       if (this._contexts[context] && this._renderer[renderer]) {
         this._borders = null;
         this._sources.push({context: context, renderer: renderer, source: source});
+      }
+    };
+
+    /**
+     * Remove a source from the manager.
+     *
+     * @param name {string}   The name of the source to remove.
+     */
+    PlotManager.prototype.removeSource = function(name) {
+      var i = 0;
+      while (i < this._sources.length) {
+        if (this._sources[i].source.name() == name) {
+          this._sources.splice(i, 1);
+        } else {
+          i += 1;
+        }
       }
     };
 
@@ -267,7 +346,7 @@ var cry; (function(cry, d3, $) {
   /*******************************************************************************
    * A private bus class that is used internally for messaging.
    *
-   * @returns {CryBus}
+   * @returns {Function}
    ******************************************************************************/
    var CryBus = (function() {
 

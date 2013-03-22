@@ -296,7 +296,7 @@ var cry; (function(cry) {
    * Class cry.RandomSpikes.
    * Source for random spike trains, that can be used as test data.
    *
-   * @returns {RandomSpikes} Constructor for RandomSpikes
+   * @returns {Function} Constructor for RandomSpikes
    ******************************************************************************/
   cry.RandomSpikes = (function() {
 

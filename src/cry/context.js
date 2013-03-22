@@ -250,7 +250,7 @@ var cry; (function(cry, d3) {
      *
      * @param onselect  {Function}    The new value.
      *
-     * @returns {Function|Context} The value (getter) or the context itself (setter).
+     * @returns {Context|Function} The value (getter) or the context itself (setter).
      */
     Context.prototype.onselect = function(onselect) {
       if (onselect !== undefined) {
@@ -262,7 +262,7 @@ var cry; (function(cry, d3) {
     };
 
     /**
-     * Set multiple opions.
+     * Set multiple options.
      *
      * @param opt {Object}    An option object.
      *

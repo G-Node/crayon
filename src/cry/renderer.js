@@ -17,7 +17,9 @@ var cry; (function(cry) {
     /**
      * Constructor of the class Renderer.
      *
-     * @param type    A type name for the renderer e.g. signal, spike or event.
+     * @constructor @this Renderer
+     *
+     * @param type {string}   A type name for the renderer e.g. signal, spike or event.
      */
     function Renderer(type) {
       this._class    = 'renderer-' + (Math.random() * Math.pow(2, 32)).toString(32);
@@ -26,7 +28,7 @@ var cry; (function(cry) {
     }
 
     /**
-     * Clear all plots from contexts.
+     * Clear all plots from all contexts.
      */
     Renderer.prototype.clear = function() {
       for (var i in this._contexts) {
@@ -38,9 +40,9 @@ var cry; (function(cry) {
     /**
      * Draw plots on contexts.
      *
-     * @param context   The context to draw on.
-     * @param source    The data source.
-     * @param sliced {Boolean} if true, render sliced data.
+     * @param context {Context} The context to draw on.
+     * @param source {Source}   The data source.
+     * @param sliced {Boolean}  If true, render sliced data.
      */
     Renderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
@@ -60,6 +62,8 @@ var cry; (function(cry) {
 
     /**
      * Constructor for the class SignalRenderer.
+     *
+     * @constructor @this SignalRenderer
      */
     SignalRenderer.inherits(cry.Renderer);
     function SignalRenderer() {
@@ -67,10 +71,11 @@ var cry; (function(cry) {
     }
 
     /**
-     * Draw analog signals useing the data from the specified source.
+     * Draw analog signals using the data from the specified source.
      *
-     * @param context   The context to draw on.
-     * @param source    The source providing the data for the plot.
+     * @param context {Context}   The context to draw on.
+     * @param source {Source}     The source providing the data for the plot.
+     * @param sliced {Boolean}    Plot sliced data (optional).
      */
     SignalRenderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
@@ -123,6 +128,8 @@ var cry; (function(cry) {
 
     /**
      * Constructor for the class Spike renderer.
+     *
+     * @constructor @this SpikeRenderer
      */
     SpikeRenderer.inherits(cry.Renderer);
     function SpikeRenderer() {
@@ -132,8 +139,9 @@ var cry; (function(cry) {
     /**
      * Draw spiketrains using the given context and data source.
      *
-     * @param context   The context to draw on.
-     * @param source    The source of the spiketrain data.
+     * @param context {Context}   The context to draw on.
+     * @param source {Source}     The source providing the data for the plot.
+     * @param sliced {Boolean}    Plot sliced data (optional).
      */
     SpikeRenderer.prototype.render = function(context, source, sliced) {
       this._contexts[context.name()] = context;
