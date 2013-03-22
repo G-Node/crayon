@@ -256,7 +256,6 @@ var cry; (function(cry, d3) {
           ext[0] = that.xmin();
           ext[1] = that.xmax();
         }
-        console.log("Context.onBrush() diff="+diff+" / last=["+last[0]+","+last[1]+"] / ext=["+ext[0]+","+ext[1]+"]");
         if (typeof (act) == 'function' && (ext[0] != last[0] || ext[1] != last[1])) {
           act(ext[0], ext[1]);
           last = ext;

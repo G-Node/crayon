@@ -202,7 +202,6 @@ var cry; (function(cry, d3, $) {
           var sconf = that._sources[i];
           var name  = sconf.source.name();
           if (name == source.name()) {
-            console.log("PlotManager.renderOnSlice() source: " + source.name());
             var context  = that._contexts[sconf.context];
             var renderer = that._renderer[sconf.renderer];
             renderer.render(context, source, true);
