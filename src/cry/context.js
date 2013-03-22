@@ -70,18 +70,42 @@ var cry; (function(cry, d3) {
       this.initSelection();
     }
 
+    /**
+     * Getter for the svg element that represents the context.
+     *
+     * @returns {d3} The svg element representing the context.
+     */
     Context.prototype.svg = function() {
       return this._svg;
     };
 
+    /**
+     * Getter for the defs element in the context.
+     *
+     * @returns {d3} The defs element of the context.
+     */
     Context.prototype.defs = function() {
       return this._defs;
     };
 
+    /**
+     * Getter for the name of the context.
+     *
+     * @returns {string} The name of the context.
+     */
     Context.prototype.name = function() {
       return this._name;
     };
 
+    /**
+     * Getter/setter for the xmin value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param xmin  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.xmin = function(xmin) {
       if (xmin !== undefined) {
         this._xmin = _adjustDown(xmin);
@@ -91,6 +115,15 @@ var cry; (function(cry, d3) {
       return this._xmin;
     };
 
+    /**
+     * Getter/setter for the xmax value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param xmax  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.xmax = function(xmax) {
       if (xmax !== undefined) {
         this._xmax = _adjustUp(xmax);
@@ -100,6 +133,15 @@ var cry; (function(cry, d3) {
       return this._xmax;
     };
 
+    /**
+     * Getter/setter for the ymin value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param ymin  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.ymin = function(ymin) {
       if (ymin !== undefined) {
         this._ymin = _adjustDown(ymin);
@@ -109,6 +151,15 @@ var cry; (function(cry, d3) {
       return this._ymin;
     };
 
+    /**
+     * Getter/setter for the ymax value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param ymax  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.ymax = function(ymax) {
       if (ymax !== undefined) {
         this._ymax = _adjustUp(ymax);
@@ -118,6 +169,15 @@ var cry; (function(cry, d3) {
       return this._ymax;
     };
 
+    /**
+     * Getter/setter for the xticks value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param xticks  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.xticks = function(xticks) {
       if (xticks !== undefined) {
         this._xticks = Math.round(xticks);
@@ -127,6 +187,15 @@ var cry; (function(cry, d3) {
       return this._xticks;
     };
 
+    /**
+     * Getter/setter for the ytics value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param yticks  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.yticks = function(yticks) {
       if (yticks !== undefined) {
         this._yticks = Math.round(yticks);
@@ -136,6 +205,15 @@ var cry; (function(cry, d3) {
       return this._yticks;
     };
 
+    /**
+     * Getter/setter for the width value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param width  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.width = function(width) {
       if (width !== undefined) {
         this._width = Math.round(width);
@@ -145,6 +223,15 @@ var cry; (function(cry, d3) {
       return this._width;
     };
 
+    /**
+     * Getter/setter for the height value.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param height  {string}    The new value.
+     *
+     * @returns {string|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.height = function(height) {
       if (height !== undefined) {
         this._height = Math.round(height);
@@ -154,6 +241,17 @@ var cry; (function(cry, d3) {
       return this._height;
     };
 
+    /**
+     * Getter/setter for the 'onselect' callback. If this handler is specified
+     * the the context will provide a selection brush. Each time the selection changes
+     * the callback will be invoked with the selected range as parameters.
+     * If uses as setter it returns the context, this provides the possibility
+     * of method chaining.
+     *
+     * @param onselect  {Function}    The new value.
+     *
+     * @returns {Function|Context} The value (getter) or the context itself (setter).
+     */
     Context.prototype.onselect = function(onselect) {
       if (onselect !== undefined) {
         this._onselect = onselect;
@@ -163,6 +261,13 @@ var cry; (function(cry, d3) {
       return this._onselect;
     };
 
+    /**
+     * Set multiple opions.
+     *
+     * @param opt {Object}    An option object.
+     *
+     * @returns {Context} The context.
+     */
     Context.prototype.options = function(opt) {
       if (opt) {
         if (opt.hasOwnProperty('width'))
@@ -186,10 +291,24 @@ var cry; (function(cry, d3) {
       return this;
     };
 
+    /**
+     * Calculate x values in pixels from the real data.
+     *
+     * @param val {number} The value to turn into a pixel.
+     *
+     * @returns {number} The calculated pixels.
+     */
     Context.prototype.xScale = function(val) {
       return this._xScale(val);
     };
 
+    /**
+     * Calculate y values in pixels from the real data.
+     *
+     * @param val {number} The value to turn into a pixel.
+     *
+     * @returns {number} The calculated pixels.
+     */
     Context.prototype.yScale = function(val) {
       return this._yScale(val);
     };
@@ -204,6 +323,11 @@ var cry; (function(cry, d3) {
       return this;
     };
 
+    /**
+     * Redraw the axis and the selection brush.
+     *
+     * @returns {Context} The context.
+     */
     Context.prototype.redraw = function() {
       this._xScale.domain([this._xmin, this._xmax])
                   .range([this._padd + 10, this._width - this._padd]);
@@ -222,6 +346,12 @@ var cry; (function(cry, d3) {
       return this;
     };
 
+    /**
+     * Initialize or remove the selection brush depending on the existance of the
+     * onselect callback.
+     *
+     * @returns {Context} The context.
+     */
     Context.prototype.initSelection = function() {
       if (this._onselect) {
         if (!this._brush)
@@ -243,6 +373,12 @@ var cry; (function(cry, d3) {
       }
     };
 
+    /**
+     * Create a handler for brush events.
+     * It checks if the selection has changed an invokes the onselect callback.
+     *
+     * @returns {Function} A handler for brush events.
+     */
     Context.prototype.onBrush = function() {
       var that = this;
       var last = [this.xmin(), this.xmax()];
@@ -263,6 +399,13 @@ var cry; (function(cry, d3) {
       };
     };
 
+    /**
+     * Adjust values.
+     *
+     * @param val {number} The value to adjust.
+     *
+     * @return {number} The adjusted value.
+     */
     function _adjustUp(val) {
       var x = val;
       if (Math.abs(x) > 0) {
@@ -271,6 +414,13 @@ var cry; (function(cry, d3) {
       return x;
     }
 
+    /**
+     * Adjust values.
+     *
+     * @param val {number} The value to adjust.
+     *
+     * @return {number} The adjusted value.
+     */
     function _adjustDown(val) {
       var x = val;
       if (Math.abs(x) > 0) {
