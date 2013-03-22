@@ -68,13 +68,11 @@ var cry; (function(cry, d3, $) {
         if (border.ymax > conf.ymax)
           conf.ymax = border.ymax;
       }
-      /// iterate over contexts and set global borders
+      /// iterate over contexts and set global borders and clear context
       for (var i in this._contexts) {
-        this._contexts[i].options(conf);
+        this._contexts[i].clear().options(conf);
       }
       this._selcontext.options(conf);
-      // call clear on all renderer
-      for (var i in this._renderer) { this._renderer[i].clear(); }
       // iterate over sources and plot their data
       for (var i in this._sources) {
         source   = this._sources[i];
@@ -100,12 +98,9 @@ var cry; (function(cry, d3, $) {
           conf.ymax = border.ymax;
       }
 
-      // call clear on all renderer
-      for (var i in this._renderer) { this._renderer[i].clear(); }
-
-      /// iterate over contexts and set global borders
+      // iterate over contexts and set global borders
       for (var i in this._contexts) {
-        this._contexts[i].options(conf);
+        this._contexts[i].clear().options(conf);
       }
 
       // request sliced data from source
@@ -122,11 +117,12 @@ var cry; (function(cry, d3, $) {
      */
     PlotManager.prototype.createContext = function(name, options) {
       if (name && !this._contexts[name]) {
-        // call clear on all renderer
-        for (var i in this._renderer) { this._renderer[i].clear(); }
-        // calculate height for contexts
+        // calculate height for contexts and clear contexts
         var ncontext = 1;
-        for (var i in this._contexts) { ncontext += 1; }
+        for (var i in this._contexts) {
+          this._contexts[i].clear();
+          ncontext += 1;
+        }
         var height = (this._height-this._selconfig.height) / ncontext;
         // iterate over contexts and set height
         for (var i in this._contexts) { this._contexts[i].height(height); }

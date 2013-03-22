@@ -194,6 +194,16 @@ var cry; (function(cry, d3) {
       return this._yScale(val);
     };
 
+    /**
+     * Removes all plots from this context.
+     *
+     * @returns {Context} The context.
+     */
+    Context.prototype.clear = function() {
+      this._svg().selectAll('.plot').remove();
+      return this;
+    };
+
     Context.prototype.redraw = function() {
       this._xScale.domain([this._xmin, this._xmax])
                   .range([this._padd + 10, this._width - this._padd]);
