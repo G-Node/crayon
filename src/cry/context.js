@@ -200,7 +200,7 @@ var cry; (function(cry, d3) {
      * @returns {Context} The context.
      */
     Context.prototype.clear = function() {
-      this._svg().selectAll('.plot').remove();
+      this._svg.selectAll('.plot').remove();
       return this;
     };
 

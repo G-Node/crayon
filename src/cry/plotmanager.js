@@ -42,6 +42,9 @@ var cry; (function(cry, d3, $) {
       // the default context
       this._default;
 
+      // calculated borders
+      this._borders = null;
+
       // create a context for selections
       this._selconfig  = {width: this._width, height: 100, yticks: 2,
                           onselect: this._onselect()};
@@ -53,26 +56,36 @@ var cry; (function(cry, d3, $) {
      * Plot all data from all sources using the configured renderer and context.
      */
     PlotManager.prototype.plot = function() {
-      var conf = {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
-      var source, context, border, renderer;
-      // iterate over sources to calculate global borders
-      for (var i in this._sources) {
-        source = this._sources[i].source;
-        border = source.dataBorders();
-        if (border.xmin < conf.xmin)
-          conf.xmin = border.xmin;
-        if (border.xmax > conf.xmax)
-          conf.xmax = border.xmax;
-        if (border.ymin < conf.ymin)
-          conf.ymin = border.ymin;
-        if (border.ymax > conf.ymax)
-          conf.ymax = border.ymax;
+      var conf, source, context, border, renderer;
+
+      // calculate borders
+      if (this._borders) {
+        // borders are still valid, copy them
+        conf = $.extend(true, {}, this._borders);
+      } else {
+        // iterate over sources to calculate global borders
+        conf = {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
+        for (var i in this._sources) {
+          source = this._sources[i].source;
+          border = source.dataBorders();
+          if (border.xmin < conf.xmin)
+            conf.xmin = border.xmin;
+          if (border.xmax > conf.xmax)
+            conf.xmax = border.xmax;
+          if (border.ymin < conf.ymin)
+            conf.ymin = border.ymin;
+          if (border.ymax > conf.ymax)
+            conf.ymax = border.ymax;
+        }
+        this._borders = $.extend(true, {}, conf);
       }
+
       /// iterate over contexts and set global borders and clear context
       for (var i in this._contexts) {
-        this._contexts[i].clear().options(conf);
+        this._contexts[i].clear().options(this._borders);
       }
-      this._selcontext.options(conf);
+      this._selcontext.clear().options(this._borders);
+
       // iterate over sources and plot their data
       for (var i in this._sources) {
         source   = this._sources[i];
@@ -86,22 +99,36 @@ var cry; (function(cry, d3, $) {
     };
 
     PlotManager.prototype.plotSlice = function(x1, x2) {
-      var conf = {xmin: x1, xmax: x2, ymin: 0, ymax: 0};
-      var source, context, border, renderer;
-      // iterate over sources to calculate global borders
-      for (var i in this._sources) {
-        source = this._sources[i].source;
-        border = source.dataBorders();
-        if (border.ymin < conf.ymin)
-          conf.ymin = border.ymin;
-        if (border.ymax > conf.ymax)
-          conf.ymax = border.ymax;
-      }
+      var conf, source, border;
 
-      // iterate over contexts and set global borders
+      // calculate borders
+      if (this._borders) {
+        // borders are still valid, copy them
+        conf = $.extend(true, {}, this._borders);
+      } else {
+        // iterate over sources to calculate global borders
+        conf = {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
+        for (var i in this._sources) {
+          source = this._sources[i].source;
+          border = source.dataBorders();
+          if (border.xmin < conf.xmin)
+            conf.xmin = border.xmin;
+          if (border.xmax > conf.xmax)
+            conf.xmax = border.xmax;
+          if (border.ymin < conf.ymin)
+            conf.ymin = border.ymin;
+          if (border.ymax > conf.ymax)
+            conf.ymax = border.ymax;
+        }
+        this._borders = $.extend(true, {}, conf);
+      }
+      conf.xmin = x1; conf.xmax = x2;
+
+      /// iterate over contexts and set global borders and clear context
       for (var i in this._contexts) {
         this._contexts[i].clear().options(conf);
       }
+      //this._selcontext.clear().options(this._borders);
 
       // request sliced data from source
       for (var i in this._sources) {
@@ -169,6 +196,7 @@ var cry; (function(cry, d3, $) {
      */
     PlotManager.prototype.addSource = function(source, context, renderer) {
       if (this._contexts[context] && this._renderer[renderer]) {
+        this._borders = null;
         this._sources.push({context: context, renderer: renderer, source: source});
       }
     };
@@ -192,7 +220,7 @@ var cry; (function(cry, d3, $) {
         };
       }
       return this._sliceNotifyHandler;
-    }
+    };
 
     PlotManager.prototype._renderOnSlice = function() {
       var that = this;
@@ -205,13 +233,10 @@ var cry; (function(cry, d3, $) {
             var context  = that._contexts[sconf.context];
             var renderer = that._renderer[sconf.renderer];
             renderer.render(context, source, true);
-            if (context.name() == that._default) {
-              renderer.render(that._selcontext, source);
-            }
           }
         }
       };
-    }
+    };
 
     return PlotManager;
   })();
