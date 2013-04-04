@@ -235,7 +235,7 @@ var cry; (function(cry) {
      */
     RandomSignal.inherits(cry.Source);
     function RandomSignal(xmax, ymax, size, num) {
-      this.parent.constructor.call(this);
+      RandomSignal.parent.constructor.call(this);
       this._xmax = xmax || 100;
       this._ymax = ymax || 1000;
       this._size = size || 1000;
@@ -312,7 +312,7 @@ var cry; (function(cry) {
      */
     RandomSpikes.inherits(cry.Source);
     function RandomSpikes(xmax, size, num) {
-      this.parent.constructor.call(this);
+      RandomSpikes.parent.constructor.call(this);
       this._xmax = xmax || 100;
       this._size = size || 1000;
       this._num  = num  || 1;

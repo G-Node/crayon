@@ -67,7 +67,7 @@ var cry; (function(cry) {
      */
     SignalRenderer.inherits(cry.Renderer);
     function SignalRenderer() {
-      this.parent.constructor.call(this, 'signal');
+      SignalRenderer.parent.constructor.call(this, 'signal');
     }
 
     /**
@@ -133,7 +133,7 @@ var cry; (function(cry) {
      */
     SpikeRenderer.inherits(cry.Renderer);
     function SpikeRenderer() {
-      this.parent.constructor.call(this, 'spike');
+      SpikeRenderer.parent.constructor.call(this, 'spike');
     }
 
     /**
