@@ -62,9 +62,18 @@ var cry; (function(cry) {
     /**
      * Load data into the source.
      */
-    Source.prototype.load = function() {
+    Source.prototype.load = function(callback) {
       // implement this in subclass
       console.log("Source.load(): unimplemented method.");
+    };
+    
+    /**
+     * Check if data are loaded.
+     * 
+     * @returns {Boolean} True if loaded, false otherwise.
+     */
+    Source.prototype.hasData = function() {
+      return this._dataReady;
     };
 
     /**
@@ -74,7 +83,7 @@ var cry; (function(cry) {
      */
     Source.prototype.data = function() {
       if (!this._dataReady) {
-        this.load();
+    	throw "Source: no data available. Use hasData() to avoid this error.";
       }
       return this._data;
     };
@@ -86,7 +95,7 @@ var cry; (function(cry) {
      */
     Source.prototype.dataBorders = function() {
       if (!this._dataReady) {
-        this.load();
+    	throw "Source: no data available. Use hasData() to avoid this error.";
       }
       return _borders(this._data);
     };
@@ -188,8 +197,9 @@ var cry; (function(cry) {
      *  @returns {{xmin, xmax, ymin, ymax}} An object containing all min and max values.
      */
     function _borders(data) {
-      var border = {xmin : 0, xmax : 0, ymin : 0, ymax : 0};
-
+      var border = {xmin: Number.MAX_VALUE, xmax: Number.MIN_VALUE, 
+ 		     						ymin: Number.MAX_VALUE, ymax: Number.MIN_VALUE};
+      
       for (var i = 0; i < data.length; i += 1) {
 
         var d = data[i].data;
@@ -273,6 +283,7 @@ var cry; (function(cry) {
         }
         this._dataReady = true;
       }
+      callback(this);
     };
 
     /**
@@ -335,6 +346,7 @@ var cry; (function(cry) {
         }
         this._dataReady = true;
       }
+      callback(this);
     };
 
     /**

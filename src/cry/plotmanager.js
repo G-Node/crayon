@@ -24,9 +24,6 @@ var cry; (function(cry, d3, $) {
         this._svg = d3.select('#'+svg);
       else
         this._svg = svg;
-      // crate a message bus and register render handlers
-      this._bus = new CryBus();
-      this._bus.subscribe('slice', this._renderOnSlice());
       // structure for renderer:
       // {<name>: <renderer>, ...}
       this._renderer = {};
@@ -57,46 +54,63 @@ var cry; (function(cry, d3, $) {
      * Plot all data from all sources using the configured renderer and context.
      */
     PlotManager.prototype.plot = function() {
-      var conf, source, context, border, renderer;
-
-      // calculate borders
-      if (this._borders) {
-        // borders are still valid, copy them
-        conf = $.extend(true, {}, this._borders);
-      } else {
-        // iterate over sources to calculate global borders
-        conf = {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
-        for (var i in this._sources) {
-          source = this._sources[i].source;
-          border = source.dataBorders();
-          if (border.xmin < conf.xmin)
-            conf.xmin = border.xmin;
-          if (border.xmax > conf.xmax)
-            conf.xmax = border.xmax;
-          if (border.ymin < conf.ymin)
-            conf.ymin = border.ymin;
-          if (border.ymax > conf.ymax)
-            conf.ymax = border.ymax;
-        }
-        this._borders = $.extend(true, {}, conf);
+    	var count = 0, 
+	        that  = this,
+	        source;
+     
+      // load data from all sources
+      for (var i = 0; i < this._sources.length; i++) {
+    	  source = this._sources[i].source;
+    	  source.load(handler);
       }
+      
+			function handler() {
+				var source, border, renderer, context;
+				
+				count  += 1;
+				if (count === that._sources.length) {
+					// calcualte borders
+					if (!that._borders) {
+					  var b = {xmin: Number.MAX_VALUE, xmax: Number.MIN_VALUE, 
+			  		         ymin: Number.MAX_VALUE, ymax: Number.MIN_VALUE};
+						
+						for (var i = 0; i < that._sources.length; i++) {
+							source = that._sources[i].source;
+							border = source.dataBorders();
+							if (border.xmin < b.xmin) {
+								b.xmin = border.xmin;
+						  } if (border.xmax > b.xmax) {
+								b.xmax = border.xmax;
+						  } if (border.ymin < b.ymin) {
+								b.ymin = border.ymin;
+						  } if (border.ymax > b.ymax) {
+								b.ymax = border.ymax;
+						  }
+						}
+						  
+						that._borders = b;
+					}
+					
+				  // iterate over contexts and set global borders and clear context
+		      for (var i in that._contexts) {
+		      	if (that._contexts.hasOwnProperty(i)) {
+		      		that._contexts[i].clear().options(that._borders);
+		      	}
+		      }
+		      that._selcontext.clear().options(that._borders);
 
-      /// iterate over contexts and set global borders and clear context
-      for (var i in this._contexts) {
-        this._contexts[i].clear().options(this._borders);
-      }
-      this._selcontext.clear().options(this._borders);
-
-      // iterate over sources and plot their data
-      for (var i in this._sources) {
-        source   = this._sources[i];
-        context  = this._contexts[source.context];
-        renderer = this._renderer[source.renderer];
-        renderer.render(context, source.source);
-        if (context.name() == this._default) {
-          renderer.render(this._selcontext, source.source);
-        }
-      }
+		      // iterate over sources and plot their data
+		      for (var i = 0; i < that._sources.length; i++) {
+		        source   = that._sources[i];
+		        context  = that._contexts[source.context];
+		        renderer = that._renderer[source.renderer];
+		        renderer.render(context, source.source);
+		        if (context.name() == that._default) {
+		          renderer.render(that._selcontext, source.source);
+		        }
+		      }
+				}
+			}
     };
 
     /**
@@ -106,41 +120,58 @@ var cry; (function(cry, d3, $) {
      * @param xmax {number}   The upper border.
      */
     PlotManager.prototype.plotSlice = function(xmin, xmax) {
-      var conf, source, border;
-
-      // calculate borders
-      if (this._borders) {
-        // borders are still valid, copy them
-        conf = $.extend(true, {}, this._borders);
-      } else {
-        // iterate over sources to calculate global borders
-        conf = {xmin: 0, xmax: 0, ymin: 0, ymax: 0};
-        for (var i in this._sources) {
-          source = this._sources[i].source;
-          border = source.dataBorders();
-          if (border.xmin < conf.xmin)
-            conf.xmin = border.xmin;
-          if (border.xmax > conf.xmax)
-            conf.xmax = border.xmax;
-          if (border.ymin < conf.ymin)
-            conf.ymin = border.ymin;
-          if (border.ymax > conf.ymax)
-            conf.ymax = border.ymax;
-        }
-        this._borders = $.extend(true, {}, conf);
+    	var count = 0, 
+    	    that  = this,
+    	    source;
+      
+      // load data from all sources
+      for (var i = 0; i < this._sources.length; i++) {
+    	  source = this._sources[i].source;
+    	  source.slice(xmin, xmax, handler);
       }
-      conf.xmin = xmin; conf.xmax = xmax;
+      
+			function handler() {
+				var source, border, renderer, context;
+				
+				count  += 1;
+				if (count === that._sources.length) {
+					// calcualte borders
+				  var b = {xmin: Number.MAX_VALUE, xmax: Number.MIN_VALUE, 
+				  		     ymin: Number.MAX_VALUE, ymax: Number.MIN_VALUE};
+						
+					for (var i = 0; i < that._sources.length; i++) {
+						source = that._sources[i].source;
+						border = source.sliceBorders();
+						if (border.xmin < b.xmin) {
+							b.xmin = border.xmin;
+					  } if (border.xmax > b.xmax) {
+							b.xmax = border.xmax;
+					  } if (border.ymin < b.ymin) {
+							b.ymin = border.ymin;
+					  } if (border.ymax > b.ymax) {
+							b.ymax = border.ymax;
+					  }
+					}
+					
+				  // iterate over contexts and set global borders and clear context
+		      for (var i in that._contexts) {
+		      	if (that._contexts.hasOwnProperty(i)) {
+		      		that._contexts[i].clear().options(b);
+		      	}
+		      }
 
-      /// iterate over contexts and set global borders and clear context
-      for (var i in this._contexts) {
-        this._contexts[i].clear().options(conf);
-      }
-
-      // request sliced data from source.
-      // when done each source creates a slice event which triggers a plot handler.
-      for (var i in this._sources) {
-        this._sources[i].source.slice(xmin, xmax, this._sliceNotify());
-      }
+		      // iterate over sources and plot their data
+		      for (var i = 0; i < that._sources.length; i++) {
+		        source   = that._sources[i];
+		        context  = that._contexts[source.context];
+		        renderer = that._renderer[source.renderer];
+		        renderer.render(context, source.source, true);
+		        if (context.name() == that._default) {
+		          renderer.render(that._selcontext, source.source);
+		        }
+		      }
+				}
+			}
     };
 
     /**
@@ -302,123 +333,7 @@ var cry; (function(cry, d3, $) {
       return this._onselectHandler;
     };
 
-    /**
-     * Creates a handler that can be passed to the slice() method of a source. It produces
-     * an slice event on the message bus.
-     *
-     * @returns {Function} A handler that produces slice events.
-     */
-    PlotManager.prototype._sliceNotify = function() {
-      if (!this._sliceNotifyHandler) {
-        var that = this;
-        this._sliceNotifyHandler = function(source) {
-          that._bus.publish('slice', source);
-        };
-      }
-      return this._sliceNotifyHandler;
-    };
-
-    /**
-     * Creates a handler for slice events. If this handler recieves an event, it will arrange for all
-     * configured renderers to draw the data to the respective context.
-     *
-     * @returns {Function} A handler for slice events.
-     */
-    PlotManager.prototype._renderOnSlice = function() {
-      var that = this;
-      return function(event, source) {
-        // iterate over sources and plot all data
-        for (var i in that._sources) {
-          var sconf = that._sources[i];
-          var name  = sconf.source.name();
-          if (name == source.name()) {
-            var context  = that._contexts[sconf.context];
-            var renderer = that._renderer[sconf.renderer];
-            renderer.render(context, source, true);
-          }
-        }
-      };
-    };
-
     return PlotManager;
-  })();
-
-  /*******************************************************************************
-   * A private bus class that is used internally for messaging.
-   *
-   * @returns {Function}
-   ******************************************************************************/
-   var CryBus = (function() {
-
-    /**
-     * Constructor for a private bus class.
-     *
-     * @constructor
-     * @this {CryBus}
-     */
-    function CryBus() {
-      this.onerror = function(event, data) {
-        if (data && data.error && console) {
-          console.log('CryBus (ERROR): event = ' + event + ' // error' + data.response || data.error);
-          return false;
-        }
-        return true;
-      };
-    }
-
-    /**
-     * Subscribe a function to a specific event.
-     *
-     * @param event {string}    The event name.
-     * @param fn {Function}     The function to call when events are published.
-     *
-     * @return {CryBus} The event bus.
-     */
-    CryBus.prototype.subscribe = function(event, fn) {
-      if (cry.debug && console)
-        console.log('CryBus (DEBUG): subscribe event ' + event);
-      $(this).bind(event, fn);
-      return this;
-    };
-
-    /**
-     * Unsubscribe a specific event.
-     *
-     * @param event {string}    The event name.
-     *
-     * @return {CryBus} The event bus.
-     */
-    CryBus.prototype.unsubscribe = function(event) {
-      if (cry.debug && console)
-        console.log('CryBus (DEBUG): unsubscribe event ' + event);
-      $(this).unbind(event);
-      return this;
-    };
-
-    /**
-     * Fire a specific event.
-     *
-     * @param event {string}    The event name.
-     * @param data {Object}     The data that will be passed to the event handler function
-     *                          along with the event.
-     *
-     * @return {CryBus} The event bus.
-     */
-    CryBus.prototype.publish = function(event, data) {
-      if (this.onerror(event, data)) {
-        if (cry.debug && console) {
-          var d = data || 'none';
-          console.log('CryBus (DEBUG): publish event ' + event + ' // data = ' + d);
-        }
-        $(this).trigger(event, data);
-      } else if (console) {
-        var d = data || 'none';
-        console.log('CryBus (DEBUG): event not published due to errors // data = ' + d);
-      }
-      return this;
-    };
-
-    return CryBus;
   })();
 
 })(cry || (cry = {}), d3, jQuery); // end module cry
