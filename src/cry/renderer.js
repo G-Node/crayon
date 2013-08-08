@@ -163,6 +163,9 @@ var cry;
             var alldata = [],
                 data, plot;
 
+            // remember this context
+            this._contexts[context.name()] = context;
+
             // collect data from sources
             if (sliced) {
                 for (var i = 0; i < sources.length; i++) {

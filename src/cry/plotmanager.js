@@ -39,7 +39,7 @@ var cry;
             this._height = this._svg.attr('height');
 
             // the default context
-            this._default;
+            this._default = undefined;
 
             // calculated borders
             this._borders = null;
@@ -229,7 +229,7 @@ var cry;
                 }
                 var height = (this._height - this._selconfig.height) / ncontext;
                 // iterate over contexts and set height
-                for (var i in this._contexts) {
+                for (i in this._contexts) {
                     this._contexts[i].height(height);
                 }
 
