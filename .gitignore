@@ -12,3 +12,7 @@ static/crayon*
 .project
 .settings/
 .externalToolBuilders
+
+# IDEA project settings
+.idea
+Crayon.iml
