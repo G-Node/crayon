@@ -126,7 +126,10 @@ var cry;
                             context = that._contexts[j];
                             sources = sorted[i][j];
 
-                            renderer.render(context, sources)
+                            renderer.render(context, sources);
+                            if (context.name() == that._default) {
+                                renderer.render(that._selcontext, sources);
+                            }
                         }
                     }
                 }
@@ -206,7 +209,10 @@ var cry;
                             context = that._contexts[j];
                             sources = sorted[i][j];
 
-                            renderer.render(context, sources, true)
+                            renderer.render(context, sources, true);
+                            if (context.name() == that._default) {
+                                renderer.render(that._selcontext, sources, true);
+                            }
                         }
                     }
                 }
